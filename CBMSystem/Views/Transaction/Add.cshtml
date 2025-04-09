@@ -1,0 +1,184 @@
+﻿@* 
+@if (ViewBag.Accounts != null)
+{
+    <select asp-for="AccountNumber" asp-items="ViewBag.Accounts" class="form-select"></select>
+}
+else
+{
+    <p class="text-danger">Account list could not be loaded.</p>
+}
+
+<form asp-action="Add" method="post" class="card p-4 shadow">
+    <div class="form-group mb-2">
+        <label>Account Number</label>
+        <select asp-for="AccountNumber" asp-items="ViewBag.Accounts" class="form-select"></select>
+ *@
+        @* <select asp-for="AccountNumber" class="form-control" asp-items="new SelectList(ViewBag.AccountNumbers)">
+            <option value="">-- Select Account --</option>
+        </select> *@
+    </div>
+
+
+@model Transaction
+
+@{
+    ViewData["Title"] = "Add Transaction";
+}
+
+<h2 class="text-center my-4">Add New Transaction</h2>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <form asp-action="Add" method="post">
+                        <div class="mb-3">
+                            <label asp-for="AccountNumber" class="form-label fw-bold">Account Number</label>
+                            <select asp-for="AccountNumber" asp-items="ViewBag.Accounts" class="form-select">
+                                <option value="">-- Select Account --</option>
+                            </select>
+                            <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="TransactionType" class="form-label fw-bold">Transaction Type</label>
+                            <select asp-for="TransactionType" asp-items="new SelectList(ViewBag.TransactionTypes)" class="form-select">
+                                <option value="">-- Select Type --</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Amount" class="form-label fw-bold">Amount</label>
+                            <input asp-for="Amount" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ReferenceNumber" class="form-label fw-bold">Reference No</label>
+                            <input asp-for="ReferenceNumber" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-bold">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="BalanceAfterTransaction" class="form-label fw-bold">Balance After Transaction</label>
+                            <input asp-for="BalanceAfterTransaction" class="form-control" />
+                        </div>
+
+                        <input type="hidden" asp-for="CreatedBy" value="SystemUser" />
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">Save Transaction</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h2 {
+        font-weight: 700;
+        text-align: center;
+        color: #343a40;
+        margin-bottom: 30px;
+    }
+
+    /* --- Card Styling for Transactions --- */
+    .card {
+        border-radius: 12px;
+        border: none;
+        background-color: #ffffff;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+    .card-body h5 {
+        font-weight: 600;
+        color: #007bff;
+    }
+
+    .card-body h6 {
+        font-size: 1rem;
+        color: #28a745;
+    }
+
+    .card-body p {
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    /* --- Form Styling --- */
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .form-control,
+    .form-select,
+    textarea {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        box-shadow: none;
+        transition: border-color 0.3s ease;
+    }
+
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.25);
+        }
+
+    .btn-primary,
+    .btn-success {
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 600;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+    .text-muted.small {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    /* Layout helpers */
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+</style>

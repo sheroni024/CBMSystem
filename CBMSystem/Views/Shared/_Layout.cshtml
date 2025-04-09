@@ -1,0 +1,220 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CBMSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CBMSystem.styles.css" asp-append-version="true" />
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        /* body{
+            background-image: url('image\banking image.webp');
+        } */
+        body {
+            padding-top: 70px; /* Must match navbar height */
+        }
+        
+        .navbar {
+            font-size: 16px !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 70px !important;
+            background: #ffffff !important;
+            border-bottom: 3px solid #007bff !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+            z-index: 999 !important;
+        }
+
+        .navbar-brand {
+            font-weight: bold !important;
+            font-size: 1.5rem !important;
+            color: #007bff !important;
+            line-height: 70px !important; /* Vertical center */
+        }
+
+        .navbar-nav .nav-link {
+            color: #333 !important;
+            font-weight: 500 !important;
+            margin-right: 15px !important;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #007bff !important;
+            }
+    </style>
+
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm"> @* sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"> *@
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="User" asp-action="Dashboard">Cashless Banking</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        @* <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li> *@
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="About">About</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Services" asp-action="Index">Services</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext?.Session.GetString("UserEmail")))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="User" asp-action="Dashboard">Dashboard</a></li>
+                            <li class="nav-item">
+                                <form asp-controller="User" asp-action="Logout" method="post" class="d-flex align-items-center">
+                                    <button type="submit" class="btn btn-danger" style="font-size: 17px;">Logout</button>
+                                </form>
+                            </li>
+
+                        }
+                        else
+                        {
+
+                            <li class="nav-item"><a class="btn btn-primary me-2" asp-controller="User" asp-action="Register">Register</a></li>
+                            <li class="nav-item"><a class="btn btn-secondary" asp-controller="User" asp-action="Login">Login</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    @* <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Safe, Secure & Convenient Banking</h1>
+            <p>Experience seamless digital banking with us.</p>
+        </div>
+    </section *@
+
+    <div class="container mt-5">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    @* @RenderSection("Scripts", required: false) *@
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+ 
+
+
+
+
+
+
+@* 
+
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    var userEmail = HttpContextAccessor.HttpContext?.Session.GetString("UserEmail");
+    var userName = HttpContextAccessor.HttpContext?.Session.GetString("UserName");
+}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CBMSystem</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CBMSystem.styles.css" asp-append-version="true" />
+</head>
+<body>
+     <header>
+        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CBMSystem</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Dashboard">Dashboard</a>
+                        </li>
+                        @{
+                            var userEmail = HttpContextAccessor.HttpContext?.Session.GetString("UserEmail");
+                            var userName = HttpContextAccessor.HttpContext?.Session.GetString("UserName");
+                        }
+
+                        
+
+                        <ul class="navbar-nav ms-auto">
+                            @if (!string.IsNullOrEmpty(userEmail))  // Show Logout only if user is logged in
+                            {
+                                
+                                <li class="nav-item">
+                                    <form asp-controller="User" asp-action="Logout" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-sign-out-alt"></i> Logout
+                                        </button>
+                                    </form>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-primary text-white me-3" asp-area="" asp-controller="User" asp-action="Register">Register</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-primary text-white" asp-controller="User" asp-action="Login">
+                                        <i class="fas fa-sign-in-alt"></i> Login
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </ul>
+                </div>
+            </div>
+        </nav> *@
+   @* </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - CBMSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> *@
+ 

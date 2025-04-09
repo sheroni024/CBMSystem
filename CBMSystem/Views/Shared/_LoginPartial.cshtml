@@ -1,0 +1,64 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@* @{
+    var userEmail = HttpContextAccessor.HttpContext?.Session.GetString("UserEmail");
+} *@
+
+@try
+{
+    var userEmail = HttpContextAccessor.HttpContext?.Session.GetString("UserEmail");
+    var userName = HttpContextAccessor.HttpContext?.Session.GetString("UserName");
+
+    @if (TempData["LoginSuccess"] != null)
+    {
+        <li class="nav-item">
+            <div class="alert alert-success">@TempData["LoginSuccess"]</div>
+        </li>
+    }
+    
+    @if (!string.IsNullOrEmpty(userEmail))
+    {
+        
+        <!-- User is logged in -->
+        <div class="d-flex align-items-center">
+            <span class="me-2">Welcome, @userName!</span>
+            @using (Html.BeginForm("Logout", "User", FormMethod.Post, new { @class = "d-inline" }))
+            {
+                <a href="@Url.Action("Logout", "User")" class="nav-link text-dark">LogOut</a>
+            }
+        </div>
+    }
+    else
+    {
+        <!-- ❌ User is not logged in -->
+        <div class="d-flex"> 
+            <a href="@Url.Action("Register", "User")" class="nav-link text-dark ">Register</a>
+            <a href="@Url.Action("Login", "User")" class="nav-link text-dark">Login</a>
+        </div>
+    }
+}
+catch (Exception ex)
+{
+    <p class="text-danger">Error: @ex.Message</p>
+    throw;
+
+}
+
+@* <ul class="navbar-nav ms-auto">
+    @if (!string.IsNullOrEmpty(userEmail))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="User" asp-action="Logout">Logout</a>
+        </li>
+        
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="User" asp-action="Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="User" asp-action="Login">Login</a>
+        </li>
+    }
+</ul> *@

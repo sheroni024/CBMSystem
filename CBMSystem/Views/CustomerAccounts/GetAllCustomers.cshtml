@@ -1,0 +1,259 @@
+﻿@model IEnumerable<CustomerAccount>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- Custom Styles -->
+    <style>
+        /* Page Background */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Hover Effect on Container (Dashboard Card Style) */
+        .custom-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            transition: 0.3s ease;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .custom-container:hover {
+                transform: translateY(-5px);
+                box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+                background-color: darkgr; /* Light Gray on Hover */
+            }
+
+        /* Custom Table Styling with Hover */
+        .custom-table {
+            border-radius: 8px;
+            overflow: hidden;
+            transition: 0.3s ease; /* Smooth transition for hover */
+        }
+
+        /* Table Hover Effect (Similar to Dashboard Card) */
+        .table-responsive:hover .custom-table {
+            transform: translateY(-5px);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Thead Styling with Custom Color */
+        .custom-table thead {
+            background-color: #343a40; /* Dark Gray (Bootstrap thead-dark) */
+            color: #ffffff;
+        }
+
+            /* Thead Hover Effect */
+            .custom-table thead:hover {
+                background-color: #007bff; /* Change color on hover */
+                transition: 0.3s ease;
+            }
+
+        /* Row Hover Effect */
+        .custom-table tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+            .custom-table tbody tr:hover {
+                background-color: #f0f8ff;
+            }
+
+        /* Table Cells */
+        .custom-table th, .custom-table td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        /* Responsive Table */
+        .table-responsive {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Button Styling */
+        .btn-outline-primary {
+            transition: 0.3s ease-in-out;
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+            .btn-outline-primary:hover {
+                background-color: #007bff;
+                color: white;
+            }
+
+        /* Header Title Styling with Color Change */
+        .text-primary {
+            color: #007bff !important;
+            transition: 0.3s ease;
+        }
+
+            .text-primary:hover {
+                color: #0056b3 !important; /* Darker Blue on Hover */
+            }
+
+        /* Button Styling for Professional Look */
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: 0.3s ease-in-out;
+        }
+
+        /* Remove Extra Space Between Buttons */
+        .custom-table td .btn-sm {
+            margin: 0 2px;
+            display: inline-block;
+        }
+
+        /* Table Styling */
+        .custom-table th, .custom-table td {
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* Table Header Styling */
+        .custom-table thead {
+            background-color: #007bff; /* Professional Blue */
+            color: white;
+        }
+
+        /* Table Hover Effect */
+        .custom-table tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Button Colors */
+        .btn-view {
+            background-color: #17a2b8; /* Teal Blue */
+            color: white;
+            border: none;
+            font-size:15px;
+            font-weight: bold;
+        }
+
+            .btn-view:hover {
+                background-color: #138496;
+            }
+
+        .btn-edit {
+            background-color: #ffc107; /* Amber Yellow */
+            color: black;
+            border: none;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+            .btn-edit:hover {
+                background-color: #e0a800;
+            }
+
+        .btn-delete {
+            background-color: #dc3545; /* Red */
+            color: white;
+            border: none;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+            .btn-delete:hover {
+                background-color: #bd2130;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-4">
+    <h2 class="text-center text-primary mb-4">Customer List</h2>
+
+    <div class="table-responsive">
+        <table class="table table-hover custom-table">
+            <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model)
+                {
+                    <tr>
+                        <td>@customer.CustomerId</td>
+                        <td>@customer.FirstName @customer.LastName</td>
+                        <td>@customer.Email</td>
+                        <td>@customer.MobileNumber</td>
+                        <td>
+                                <a href="@Url.Action("GetCustomerById", "CustomerAccounts", new { id = customer.CustomerId })"
+                                   class="btn btn-sm btn-view">
+                                    View
+                                </a>
+                                <a href="@Url.Action("EditCustomer", "CustomerAccounts", new { id = customer.CustomerId })"
+                                   class="btn btn-sm btn-edit">
+                                    Edit
+                                </a>
+                                <a href="@Url.Action("DeleteCustomer", "CustomerAccounts", new { id = customer.CustomerId })"
+                                   class="btn btn-sm btn-delete"
+                                   onclick="return confirm('Are you sure you want to delete this customer?');">
+                                    Delete
+                                </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    </div>
+</body>
+</html>
+
+
+<style>
+    .dropdown-alert {
+        position: fixed;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #28a745;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        transition: top 0.5s ease-in-out;
+        z-index: 1000;
+    }
+
+    .show {
+        top: 10px;
+    }
+</style>
+
+<!-- Success Dropdown Message -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="SuccessMessage" class="dropdown-alert show">
+        @TempData["SuccessMessage"]
+    </div>
+
+    <script>
+        // Automatically hide the message after 3 seconds
+        setTimeout(() => {
+            document.getElementById("SuccessMessage").classList.remove("show");
+        }, 3000);
+    </script>
+}
+

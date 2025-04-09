@@ -1,0 +1,40 @@
+﻿@model CBMSystem.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2 class="text-center" >Login</h2>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @class = "card p-4 shadow" }))
+            {
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter Email" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "form-label mt-2" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter Password" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mt-3 text-center">
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a asp-action="Register" asp-controller="User">Don't have an account? Register</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

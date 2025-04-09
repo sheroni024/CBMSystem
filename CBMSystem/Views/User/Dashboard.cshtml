@@ -1,0 +1,265 @@
+﻿<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+<style>
+
+
+    body, html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        /* background: url('/Image/image.jpg') no-repeat center center; */
+    }
+
+    h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1e3c72;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    /* The sidebar menu */
+    .sidebar {
+        height: calc(100% - 56px); /* Adjusted for navbar height */
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 56px; /* Starts below the navbar */
+        left: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+    }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+            .sidebar a:hover {
+                color: #f1f1f1;
+            }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+    .openbtn {
+        font-size: 30px;
+        cursor: pointer;
+        background-color: none /* #111 */;
+        color: black;
+        padding: 10px 15px;
+        border: none;
+    }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+/* 
+    #main {
+        transition: margin-left .5s;
+        padding: 25px;
+        }*/
+
+
+    #main {
+        transition: margin-left 0.5s;
+        padding: 25px; /* Default padding */
+        margin-left: 0;
+    }
+
+        /* When sidebar is open */
+        #main.sidebar-open {
+            margin-left: 250px; /* Same as sidebar width */
+            padding: 16px 24px; /* Optional - reduce left/right padding */
+        }
+
+    .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s;
+    }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #1e3c72;
+    }
+
+    .card-text {
+        font-size: 24px;
+        font-weight: bold;
+        color: #2a5298;
+    }
+
+    .welcome {
+        font-size: 28px;
+        font-weight: bold;
+        color: #1e3c72;
+    }
+
+    .recent-activity li {
+        padding: 5px 0;
+        font-size: 16px;
+        color: #333;
+    }
+</style>
+
+
+
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    
+    <a asp-controller="CustomerAccounts" asp-action="Index"><i class="fas fa-users"></i> Customer Accounts</a>
+    <a asp-controller="Transaction" asp-action="Index"><i class="fas fa-exchange-alt"></i> Transactions</a>
+    <a href="#"><i class="fas fa-hand-holding-usd"></i> Loan Management</a>
+    <a href="#"><i class="fas fa-chart-line"></i> Reports</a>
+    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+    <a href=""><i class="fas fa-sign-out-alt"></i> Logout</a>
+</div>
+<div id="main">
+    <h1>Bank Dashboard</h1>
+    <button class="openbtn" onclick="openNav()">☰</button>
+    <h2 class="welcome">Welcome, @ViewBag.UserFullName</h2>
+    <div class="container">
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card p-4 text-center">
+                    <a href="@Url.Action("GetAllCustomers", "CustomerAccounts")" class="text-decoration-none text-dark">
+                        <h5 class="card-title"><i class="fas fa-user-friends"></i> Total Customers</h5>
+                    </a>
+                    <p class="card-text">@ViewBag.TotalCustomers</p>
+                </div>
+            </div>
+            @* <a href="@Url.Action("GetAllCustomers", "CustomerAccounts")">
+                @ViewBag.TotalCustomers
+            </a> *@
+            <div class="col-md-4">
+                <div class="card p-4 text-center">
+                    <h5 class="card-title"><i class="fas fa-hand-holding-usd"></i> Transactions Today</h5>
+                    <p class="card-text">@ViewBag.TransactionsToday</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-4 text-center">
+                    <h5 class="card-title"><i class="fas fa-file-invoice-dollar"></i> Pending Loans</h5>
+                    <p class="card-text">@ViewBag.PendingLoans</p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card p-4 text-center">
+                    <h5 class="card-title"><i class="fas fa-piggy-bank"></i> Total Deposits</h5>
+                    <p class="card-text">@ViewBag.TotalDeposits</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card p-4 text-center">
+                    <h5 class="card-title"><i class="fas fa-chart-line"></i> Revenue This Month</h5>
+                    <p class="card-text">@ViewBag.RevenueThisMonth</p>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card p-4">
+                    <h5 class="card-title"><i class="fas fa-history"></i> Recent Activity</h5>
+                    <ul class="list-unstyled recent-activity">
+                        @foreach (var activity in ViewBag.RecentActivity)
+                        {
+                            <li><i class="fas fa-check-circle text-success"></i> @activity</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+    function openNav() {
+        document.getElementById("mySidebar").style.width = "250px";
+        // document.getElementById("mySidebar").style.display = "block";
+        document.getElementById("main").style.marginLeft = "150px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").style.width = "0";
+        // document.getElementById("mySidebar").style.display = "none";
+        document.getElementById("main").style.marginLeft = "0";
+    }
+</script>
+<style>
+    .dropdown-alert {
+        position: fixed;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #28a745;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        transition: top 0.5s ease-in-out;
+        z-index: 1000;
+    }
+
+    .show {
+        top: 10px;
+    }
+</style>
+
+<!-- Login Success Message with Dropdown Effect -->
+@if (TempData["LoginSuccess"] != null)
+{
+    <div id="loginSuccessM" class="dropdown-alert">
+        @TempData["LoginSuccess"]
+    </div>
+}
+
+<!-- Success Message for Other Actions -->
+@if (TempData["SuccessM"] != null)
+{
+    <div class="alert alert-success text-center mt-3">
+        @TempData["SuccessM"]
+    </div>
+}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let loginM = document.getElementById("loginSuccessM");
+        if (loginM) {
+            setTimeout(() => {
+                loginM.classList.add("show");
+                setTimeout(() => {
+                    loginM.classList.remove("show");
+                }, 3000); // Hides after 3 seconds
+            }, 500); // Small delay before showing
+        }
+    });
+</script>
+
+

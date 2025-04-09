@@ -1,0 +1,618 @@
+﻿@using CBMSystem.ViewModels
+@model CustomerDashboardViewModel
+
+
+
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
+<style>
+    .card {
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    }
+
+    .card:hover {
+    transform: scale(1.05); 
+    }
+
+    .card-title i {
+    color: #007bff;
+    margin-right: 8px;
+    }
+
+    .form-group {
+    margin-bottom: 15px;
+    }
+
+    .form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    }
+
+    .btn {
+    width: 100%;
+    }
+
+    .btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    }
+
+    .btn-success {
+    background-color: #28a745;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    }
+
+    .error {
+    color: red;
+    font-size: 14px;
+    }
+
+    .list-group-item {
+    font-weight: bold;
+    background-color: #f8f9fa;
+    border-left: 5px solid #007bff;
+    }
+
+
+    .dropdown-alert {
+        position: fixed;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #28a745;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        transition: top 0.5s ease-in-out;
+        z-index: 1000;
+    }
+
+    .show {
+        top: 10px;
+    }
+</style>
+
+<div class="container">
+    <div class="row mt-4">
+        <!-- Add New Customer Block -->
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <h5 class="card-title">
+                    <i class="fas fa-user-friends"></i>
+                    <a href="javascript:void(0);" onclick="toggleForm('customerForm')"> Add New Customer</a>
+                </h5>
+            </div>
+        </div>
+
+        <!-- Demate Account Block -->
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <h5 class="card-title">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <a href="javascript:void(0);" onclick="toggleForm('dematAccountForm')">Demate Account</a>
+                </h5>
+            </div>
+        </div>
+
+
+        <!-- Investment Block -->
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <h5 class="card-title">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <a href="javascript:void(0);" onclick="toggleForm('investmentForm')">Investment</a>
+                </h5>
+                @* <p class="card-text">@ViewBag.Investment</p> *@
+
+                @* <div id="investmentForm" style="display: none;">
+                    <form>
+                        <button type="button" class="btn btn-primary mt-2" onclick="showInvestmentForm('insuranceForm')">Invest in Insurance</button>
+                        <p></p>
+                        <button type="button" class="btn btn-success" onclick="showInvestmentForm('mutualFundForm')">Invest in Mutual Fund</button>
+                    </form>
+                </div> *@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="row justify-content-center" >
+        <div class="col-md-6">
+            <div class="card p-4 shadow" id="customerForm" style="display: none;">
+                @* <h3 class="text-center">Register New Customer</h3> *@
+                @Html.AntiForgeryToken()
+                @using (Html.BeginForm("Index", "CustomerAccounts", FormMethod.Post, new { @class = "form-group", @id = "registerForm" }))
+                {
+                <div class="container mt-4">
+                    <h2 class="mb-3 text-center">Customer Registration Form</h2>
+                        <div>
+                            <!-- First Name -->
+                            @Html.LabelFor(m => m.NwCustomer.FirstName)
+                            @Html.TextBoxFor(m => m.NwCustomer.FirstName, new { @class = "form-control", id = "FirstName" })
+                            @Html.ValidationMessageFor(m => m.NwCustomer.FirstName, "", new { @class = "text-danger" })
+                        </div>
+                        <div>
+                            <!-- Last Name -->
+                            @Html.LabelFor(m => m.NwCustomer.LastName)
+                            @Html.TextBoxFor(m => m.NwCustomer.LastName, new { @class = "form-control", id = "LastName" })
+                            @Html.ValidationMessageFor(m => m.NwCustomer.LastName, "", new { @class = "text-danger" })
+                        </div>
+                      
+                        <div>
+                            <!-- Email -->
+                            @Html.LabelFor(m => m.NwCustomer.Email)
+                            @Html.TextBoxFor(m => m.NwCustomer.Email, new { @class = "form-control", type = "email", id = "Email" })
+                            @Html.ValidationMessageFor(m => m.NwCustomer.Email, "", new { @class = "text-danger" })
+                        </div>
+                        <div>
+                            <!-- Mobile Number -->
+                            @Html.LabelFor(m => m.NwCustomer.MobileNumber)
+                            @Html.TextBoxFor(m => m.NwCustomer.MobileNumber, new { @class = "form-control", id = "MobileNumber", maxlength = "15" })
+                            @Html.ValidationMessageFor(m => m.NwCustomer.MobileNumber, "", new { @class = "text-danger" })
+                        </div>
+                        <div>
+                            <!-- PAN Card Number -->
+                            @Html.LabelFor(m => m.NwCustomer.PancardNumber)
+                            @Html.TextBoxFor(m => m.NwCustomer.PancardNumber, new { @class = "form-control", id = "PANCardNumber", maxlength = "20" })
+                            @Html.ValidationMessageFor(m => m.NwCustomer.PancardNumber, "", new { @class = "text-danger" })
+                        </div>
+                        <div>
+                            <!-- Adhar Card Number -->
+                            @Html.LabelFor(m => m.NwCustomer.AadhaarNumber)
+                            @Html.TextBoxFor(m => m.NwCustomer.AadhaarNumber, new { @class = "form-control", id = "AadhaarNumber", maxlength = "20" })
+                            @Html.ValidationMessageFor(m => m.NwCustomer.AadhaarNumber, "", new { @class = "text-danger" })
+                        </div>
+                        <div>
+                            <!-- Address -->
+                            @Html.LabelFor(m => m.NwCustomer.Address)
+                            @Html.TextBoxFor(m => m.NwCustomer.Address, new { @class = "form-control", id = "Address" })
+                            @Html.ValidationMessageFor(m => m.NwCustomer.Address, "", new { @class = "text-danger" })
+                        </div>
+                        <div>
+                            <!-- Date of Birth -->
+                            @Html.LabelFor(m => m.NwCustomer.DateOfBirth)
+                            @Html.TextBoxFor(m => m.NwCustomer.DateOfBirth, new { @class = "form-control", type = "date", id = "DateOfBirth" })
+                            @Html.ValidationMessageFor(m => m.NwCustomer.DateOfBirth, "", new { @class = "text-danger" })
+                        </div>
+                        <div>
+                            <!-- Gender -->
+                            @Html.LabelFor(m => m.NwCustomer.Gender)
+                                <br />
+                                <label class="me-3">
+                                @Html.RadioButtonFor(m => m.NwCustomer.Gender, "Male") Male
+                                </label>
+                                <label class="me-3">
+                                @Html.RadioButtonFor(m => m.NwCustomer.Gender, "Female") Female
+                                </label>
+                                <label>
+                                @Html.RadioButtonFor(m => m.NwCustomer.Gender, "Other") Other
+                                </label>
+                            @Html.ValidationMessageFor(m => m.NwCustomer.Gender, "", new { @class = "text-danger" })
+                        </div>
+                         @* Account Table *@
+                       
+                        <div>
+                            @Html.LabelFor(m => m.NwAccount.AccountNumber)
+                            @Html.TextBoxFor(m => m.NwAccount.AccountNumber, new { @class = "form-control", @readonly = "readonly" })
+                        </div>
+                        <div>
+                            @Html.LabelFor(m => m.NwAccount.AccountType)
+                            @Html.DropDownListFor(m => m.NwAccount.AccountType,
+                                     new SelectList(new[] { "Savings", "Current" }),
+                                     "-- Select Account Type --",
+                                     new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.NwAccount.AccountType, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div>
+                            @Html.LabelFor(m => m.NwAccount.Balance)
+                            @Html.TextBoxFor(m => m.NwAccount.Balance, new { @class = "form-control", type = "number", step = "0.01" })
+                            @Html.ValidationMessageFor(m => m.NwAccount.Balance, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div>
+                            @Html.LabelFor(m => m.NwAccount.Currency)
+                            @Html.DropDownListFor(m => m.NwAccount.Currency,
+                                     new SelectList(new[] { "INR", "USD" }),
+                                     "-- Select Currency --",
+                                     new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.NwAccount.Currency, "", new { @class = "text-danger" })
+                        </div>
+
+                            <!-- Submit Button -->
+                            <div class="form-group text-center mt-3">
+                                <button type="submit" class="btn btn-primary w-100">Register</button>
+                            </div>
+                        </div>
+                  
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Demat Account Form -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 shadow" id="dematAccountForm" style="display: none;">
+                <h3 class="text-center">Link Aadhaar to Demat</h3>
+                @using (Html.BeginForm("linkAadhaarForm", "CustomerAccounts", FormMethod.Post, new { @class = "form-group", @id = "linkAadhaarForm" }))
+                {
+                    <input type="text" placeholder="Demat ID" class="form-control mb-2" required>
+                    <input type="text" placeholder="Aadhaar Card Number" class="form-control mb-2" required>
+                    <button type="submit" class="btn btn-primary">Link Aadhaar</button>
+                    <div class="text-center mt-3">
+                        Don't have an account? <a href="javascript:void(0);" onclick="toggleForm('createDematForm')">Create Demate Account</a>
+                    </div>
+                }
+            </div>
+
+            <!-- Create Demat Account Form -->
+            <div class="card p-4 shadow mt-3" id="createDematForm" style="display: none;">
+                <h3 class="text-center">Create Demat Account</h3>
+                @using (Html.BeginForm("CreateDemat", "CustomerAccounts", FormMethod.Post, new { @class = "form-group", @id = "createDematAccountForm" }))
+                {
+                    <input type="text" name="BrokerName" placeholder="Broker Name" class="form-control mb-2" required>
+                    <input type="text" name="AccountNumber" placeholder="Account Number" class="form-control mb-2" required>
+
+                    <label class="form-label">Aadhaar Linked:</label>
+                    <select name="AadhaarLinked" class="form-control mb-2">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+
+                    <label class="form-label">PAN Linked:</label>
+                    <select name="PANLinked" class="form-control mb-2">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+
+                    <input type="number" name="Balance" placeholder="Balance (in ₹)" class="form-control mb-2" step="0.01" required>
+
+                    <label class="form-label">Account Status:</label>
+                    <select name="AccountStatus" class="form-control mb-2">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="Suspended">Suspended</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-success w-100">Create Account</button>
+
+
+                    @* <input type="text" placeholder="Full Name" class="form-control mb-2" required>
+                    <input type="email" placeholder="Email" class="form-control mb-2" required>
+                    <input type="text" placeholder="Mobile Number" class="form-control mb-2" required>
+                    <input type="text" placeholder="PAN Card Number" class="form-control mb-2" required>
+                    <input type="text" placeholder="Aadhaar Card Number" class="form-control mb-2" required>
+                    <button type="submit" class="btn btn-success">Create Account</button> *@
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Investment Forms -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 shadow" id="investmentForm" style="display: none;">
+                <h3 class="text-center">Investment</h3>
+                @using (Html.BeginForm("CreateInvestment", "Investments", FormMethod.Post, new { @class = "form-group", @id = "createInvestmentForm" }))
+                {
+                    <input type="number" name="CustomerID" placeholder="Customer ID" class="form-control mb-2" required>
+                    <input type="number" name="DematID" placeholder="Demat ID" class="form-control mb-2" required>
+
+                    <label class="form-label">Investment Type:</label>
+                    <select name="InvestmentType" class="form-control mb-2" required>
+                        <option value="Mutual Fund">Mutual Fund</option>
+                        <option value="Stock">Stock</option>
+                        <option value="Bond">Bond</option>
+                        <option value="ETF">ETF</option>
+                        <option value="Insurance">Insurance</option>
+                    </select>
+
+                    <input type="text" name="InvestmentName" placeholder="Investment Name" class="form-control mb-2" required>
+                    <input type="number" name="InvestmentAmount" placeholder="Investment Amount (₹)" class="form-control mb-2" step="0.01" required>
+
+                    <input type="number" name="UnitsPurchased" placeholder="Units Purchased" class="form-control mb-2" step="0.0001">
+                    <input type="number" name="NAV" placeholder="NAV (Mutual Funds Only)" class="form-control mb-2" step="0.0001">
+                    <input type="number" name="StockPrice" placeholder="Stock Price (Stocks Only)" class="form-control mb-2" step="0.0001">
+                    <input type="text" name="PolicyNumber" placeholder="Policy Number (Insurance Only)" class="form-control mb-2">
+                    <input type="number" name="SchemeID" placeholder="Scheme ID (If Applicable)" class="form-control mb-2">
+
+                    <label class="form-label">Investment Date:</label>
+                    <input type="datetime-local" name="InvestmentDate" class="form-control mb-2" required>
+
+                    <label class="form-label">Redemption Date (If Redeemed):</label>
+                    <input type="datetime-local" name="RedemptionDate" class="form-control mb-2">
+
+                    <label class="form-label">Status:</label>
+                    <select name="Status" class="form-control mb-2">
+                        <option value="Active">Active</option>
+                        <option value="Redeemed">Redeemed</option>
+                        <option value="Matured">Matured</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-success w-100">Add Investment</button>
+                }
+                
+                
+            @* <!-- Insurance Form -->
+            <div class="card p-4 shadow" id="insuranceForm" style="display: none;">
+                <h3 class="text-center">Insurance Investment Options</h3>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">Term Insurance</li>
+                    <li class="list-group-item">Health Insurance</li>
+                    <li class="list-group-item">Life Insurance</li>
+                </ul>
+                <form>
+                    <input type="text" placeholder="Insurance Type" class="form-control mb-2" required>
+                    <input type="number" placeholder="Amount" class="form-control mb-2" required>
+                    <button type="submit" class="btn btn-primary">Invest</button>
+                </form>
+                <div class="text-center mt-3">
+                    Want to invest in Mutual Funds? <a href="javascript:void(0);" onclick="toggleForm('mutualFundForm')">Click Here</a>
+                </div>
+            </div>
+
+            <!-- Mutual Fund Form -->
+            <div class="card p-4 shadow mt-3" id="mutualFundForm" style="display: none;">
+                <h3 class="text-center">Mutual Fund Investment Options</h3>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">Equity Mutual Fund</li>
+                    <li class="list-group-item">Debt Mutual Fund</li>
+                    <li class="list-group-item">Hybrid Mutual Fund</li>
+                </ul>
+                <form>
+                    <input type="text" placeholder="Mutual Fund Type" class="form-control mb-2" required>
+                    <input type="number" placeholder="Amount" class="form-control mb-2" required>
+                    <button type="submit" class="btn btn-success">Invest</button>
+                </form>
+                <div class="text-center mt-3">
+                    Want to invest in Insurance? <a href="javascript:void(0);" onclick="toggleForm('insuranceForm')">Click Here</a>
+                </div>
+            </div> *@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        // Generate random 11-digit AccountNumber on page load
+        $(document).ready(function () {
+            const accNum = Math.floor(10000000000 + Math.random() * 90000000000);
+            $('#NwAccount_AccountNumber').val(accNum);
+        });
+    </script>
+}
+
+<script>
+    function showInvestmentForm(formId) {
+        // Hide both investment forms first
+        document.getElementById('insuranceForm').style.display = 'none';
+        document.getElementById('mutualFundForm').style.display = 'none';
+
+        @* // Show the selected investment form
+        document.getElementById(formId).style.display = 'block'; *@
+
+        var selectedForm = document.getElementById(formId);
+
+        // Toggle visibility: if already visible, hide it; otherwise, show it
+        if (selectedForm.style.display === 'block') {
+            selectedForm.style.display = 'none';
+        } else {
+            selectedForm.style.display = 'block';
+        }
+    }
+
+    function toggleForm(formId) {
+        var form = document.getElementById(formId);
+
+        // Hide all other forms before toggling
+        var forms = ['customerForm', 'dematAccountForm', 'createDematForm', 'investmentForm', 'insuranceForm', 'mutualFundForm'];
+        forms.forEach(id => {
+            if (document.getElementById(id) && id !== formId) {
+                document.getElementById(id).style.display = 'none';
+            }
+        });
+
+        // Toggle the clicked form: Show if hidden, Hide if already visible
+        if (form) {
+            form.style.display = form.style.display === "block" ? "none" : "block";
+        }
+    }
+</script>
+
+<!-- Success Message for Other Actions -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="SuccessMessage" class="dropdown-alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let loginM = document.getElementById("SuccessMessage");
+        if (loginM) {
+            setTimeout(() => {
+                loginM.classList.add("show");
+                setTimeout(() => {
+                    loginM.classList.remove("show");
+                }, 3000); // Hides after 3 seconds
+            }, 500); // Small delay before showing
+        }
+    });
+</script>
+
+@* @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@
+
+
+@* <script>
+    $(document).ready(function () {
+        $("#registerForm").validate({
+            rules: {
+                FirstName: { required: true, minlength: 2 },
+                LastName: { required: true, minlength: 2 },
+                DateOfBirth: { required: true, date: true },
+                Gender: { required: true },
+                Email: { required: true, email: true },
+                PhoneNumber: { required: true, digits: true, minlength: 10, maxlength: 15 },
+                Password: { required: true, minlength: 6 },
+                Address: { required: true, minlength: 5 },
+                IdproofType: { required: true },
+                IdproofNumber: { required: true, minlength: 5 },
+                Kycstatus: { required: true },
+                UserType: { required: true }
+            },
+            messages: {
+                FirstName: "Enter at least 2 characters.",
+                LastName: "Enter at least 2 characters.",
+                DateOfBirth: "Enter a valid date.",
+                Gender: "Select your gender.",
+                Email: "Enter a valid email.",
+                PhoneNumber: "Enter a valid phone number.",
+                Password: "Password must be at least 6 characters.",
+                Address: "Enter at least 5 characters.",
+                IdproofType: "Select an ID proof type.",
+                IdproofNumber: "Enter at least 5 characters.",
+                Kycstatus: "Enter KYC status.",
+                UserType: "Enter the user type."
+            },
+            errorClass: "text-danger",
+            errorElement: "small",
+            highlight: function (element) {
+                $(element).addClass("is-invalid");
+            },
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid");
+            }
+        });
+    });
+</script> *@
+
+@* <script>
+    $(document).ready(function () {
+        $("#registerForm").validate({
+            rules: {
+                FirstName: {
+                    required: true,
+                    minlength: 2
+                },
+                LastName: {
+                    required: true,
+                    minlength: 2
+                },
+                DateOfBirth: {
+                    required: true,
+                    date: true
+                },
+                Gender: {
+                    required: true
+                },
+                Email: {
+                    required: true,
+                    email: true
+                },
+                PhoneNumber: {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 15
+                },
+                Password: {
+                    required: true,
+                    minlength: 6
+                },
+                Address: {
+                    required: true,
+                    minlength: 5
+                },
+                IdproofType: {
+                    required: true
+                },
+                IdproofNumber: {
+                    required: true,
+                    minlength: 5
+                },
+                // Kycstatus: {
+                //     required: true
+                // },
+                // UserType: {
+                //     required: true
+                // }
+            },
+            messages: {
+                FirstName: {
+                    required: "Please enter your first name.",
+                    minlength: "First name must be at least 2 characters long."
+                },
+                LastName: {
+                    required: "Please enter your last name.",
+                    minlength: "Last name must be at least 2 characters long."
+                },
+                DateOfBirth: {
+                    required: "Please enter your date of birth.",
+                    date: "Please enter a valid date."
+                },
+                Gender: "Please select your gender.",
+                Email: {
+                    required: "Please enter your email.",
+                    email: "Please enter a valid email address."
+                },
+                PhoneNumber: {
+                    required: "Please enter your phone number.",
+                    digits: "Only numbers are allowed.",
+                    minlength: "Phone number must be at least 10 digits.",
+                    maxlength: "Phone number cannot exceed 15 digits."
+                },
+                Password: {
+                    required: "Please enter a password.",
+                    minlength: "Password must be at least 6 characters long."
+                },
+                Address: {
+                    required: "Please enter your address.",
+                    minlength: "Address must be at least 5 characters long."
+                },
+                IdproofType: "Please select an ID proof type.",
+                IdproofNumber: {
+                    required: "Please enter your ID proof number.",
+                    minlength: "ID proof number must be at least 5 characters long."
+                },
+                // Kycstatus: "Please enter KYC status.",
+                // UserType: "Please enter the user type."
+            },
+            errorClass: "text-danger",
+            errorElement: "small",
+            highlight: function (element) {
+                $(element).addClass("is-invalid");
+            },
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid");
+            }
+        });
+    });
+</script> *@

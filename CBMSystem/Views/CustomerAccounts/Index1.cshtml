@@ -1,0 +1,207 @@
+﻿@model CBMSystem.Models.User
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+
+<style>
+    .card {
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+    .card-title i {
+        color: #007bff;
+        margin-right: 8px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .error {
+        color: red;
+        font-size: 14px;
+    }
+
+    .list-group-item {
+        font-weight: bold;
+        background-color: #f8f9fa;
+        border-left: 5px solid #007bff;
+    }
+</style>
+
+<div class="container">
+    <div class="row mt-4">
+        <!-- Add New Customer Block -->
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <h5 class="card-title">
+                    <i class="fas fa-user-friends"></i>
+                    <a href="javascript:void(0);" onclick="toggleForm('customerForm')">Add New Customer</a>
+                </h5>
+            </div>
+        </div>
+
+        <!-- Demat Account Block -->
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <h5 class="card-title">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <a href="javascript:void(0);" onclick="toggleForm('dematAccountForm')">Demat Account</a>
+                </h5>
+            </div>
+        </div>
+
+        <!-- Investment Block -->
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <h5 class="card-title">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <a href="javascript:void(0);" onclick="toggleForm('investmentForm')">Investment</a>
+                </h5>
+                <div id="investmentForm" style="display: none;">
+                    <form>
+                        <button type="button" class="btn btn-primary mt-2" onclick="showInvestmentForm('insuranceForm')">Invest in Insurance</button>
+                        <p></p>
+                        <button type="button" class="btn btn-success" onclick="showInvestmentForm('mutualFundForm')">Invest in Mutual Fund</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Demat Account Form -->
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card p-4 shadow" id="dematAccountForm" style="display: none;">
+                <h3 class="text-center">Link Aadhaar to Demat</h3>
+                @using (Html.BeginForm("Register", "CustomerAccounts", FormMethod.Post, new { @class = "form-group", @id = "registerForm" }))
+                {
+                    <input type="text" placeholder="Demat ID" class="form-control mb-2" required>
+                    <input type="text" placeholder="Aadhaar Card Number" class="form-control mb-2" required>
+                    <button type="submit" class="btn btn-primary">Link Aadhaar</button>
+                    <div class="text-center mt-3">
+                        Don't have an account? <a href="javascript:void(0);" onclick="toggleForm('createDematForm')">Create Demate Account</a>
+                    </div>
+                }
+            </div>
+
+            <!-- Create Demat Account Form -->
+            <div class="card p-4 shadow mt-3" id="createDematForm" style="display: none;">
+                <h3 class="text-center">Create Demat Account</h3>
+                @using (Html.BeginForm("CreateDemat", "CustomerAccounts", FormMethod.Post, new { @class = "form-group", @id = "createDematAccountForm" }))
+                {
+                    <input type="text" placeholder="Full Name" class="form-control mb-2" required>
+                    <input type="email" placeholder="Email" class="form-control mb-2" required>
+                    <input type="text" placeholder="Mobile Number" class="form-control mb-2" required>
+                    <input type="text" placeholder="PAN Card Number" class="form-control mb-2" required>
+                    <input type="text" placeholder="Aadhaar Card Number" class="form-control mb-2" required>
+                    <button type="submit" class="btn btn-success">Create Account</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <!-- Insurance Form -->
+            <div class="card p-4 shadow" id="insuranceForm" style="display: none;">
+                <h3 class="text-center">Insurance Investment Options</h3>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">Term Insurance</li>
+                    <li class="list-group-item">Health Insurance</li>
+                    <li class="list-group-item">Life Insurance</li>
+                </ul>
+                <form>
+                    <input type="text" placeholder="Insurance Type" class="form-control mb-2" required>
+                    <input type="number" placeholder="Amount" class="form-control mb-2" required>
+                    <button type="submit" class="btn btn-primary">Invest</button>
+                </form>
+                <div class="text-center mt-3">
+                    Want to invest in Mutual Funds? <a href="javascript:void(0);" onclick="toggForm('mutualFundForm')">Click Here</a>
+                </div>
+            </div>
+
+            <!-- Mutual Fund Form -->
+            <div class="card p-4 shadow mt-3" id="mutualFundForm" style="display: none;">
+                <h3 class="text-center">Mutual Fund Investment Options</h3>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">Equity Mutual Fund</li>
+                    <li class="list-group-item">Debt Mutual Fund</li>
+                    <li class="list-group-item">Hybrid Mutual Fund</li>
+                </ul>
+                <form>
+                    <input type="text" placeholder="Mutual Fund Type" class="form-control mb-2" required>
+                    <input type="number" placeholder="Amount" class="form-control mb-2" required>
+                    <button type="submit" class="btn btn-success">Invest</button>
+                </form>
+                <div class="text-center mt-3">
+                    Want to invest in Insurance? <a href="javascript:void(0);" onclick="toggForm('insuranceForm')">Click Here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* <script>
+    function toggleForm(formId) {
+        document.getElementById('insuranceForm').style.display = 'none';
+        document.getElementById('mutualFundForm').style.display = 'none';
+        document.getElementById(formId).style.display = 'block';
+    }
+</script> *@
+
+
+<script>
+    function toggleForm(formId) {
+        var form = document.getElementById(formId);
+        if (form) {
+            form.style.display = (form.style.display === "none" || form.style.display === "") ? "block" : "none";
+        }
+    }
+    function toggForm(formId) {
+        document.getElementById('insuranceForm').style.display = 'none';
+        document.getElementById('mutualFundForm').style.display = 'none';
+        document.getElementById('investmentForm').style.display = 'none';
+        document.getElementById(formId).style.display = 'block';
+    }
+    function showInvestmentForm(formId) {
+        document.getElementById('insuranceForm').style.display = 'none';
+        document.getElementById('mutualFundForm').style.display = 'none';
+        document.getElementById(formId).style.display = 'block';
+    }
+</script>

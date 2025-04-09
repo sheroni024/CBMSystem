@@ -1,0 +1,199 @@
+﻿@model CBMSystem.Models.User
+
+@{
+    ViewData["Title"] = "User Registration";
+}
+
+<h2 class="text-center">User Registration</h2>
+
+@* <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>*@
+
+<a href="~/lib/jquery/dist/jquery.min.map"></a>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            @using (Html.BeginForm("Register", "User", FormMethod.Post, new { @class = "card p-4 shadow" }))
+//<form asp-action="Register" method="POST" id="registrationForm">
+            {
+                <div class="form-group">
+                    @Html.LabelFor(m => m.FirstName)
+                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control"})
+                    @Html.ValidationMessageFor(m => m.FirstName)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.LastName)
+                    @Html.TextBoxFor(m => m.LastName, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.LastName)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.DateOfBirth)
+                    @Html.TextBoxFor(m => m.DateOfBirth, new { @class = "form-control", type = "date" })
+                    @Html.ValidationMessageFor(m => m.DateOfBirth)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Gender)
+                    <br />
+                    <label>
+                        @Html.RadioButtonFor(m => m.Gender, "Male") Male
+                    </label>
+                    <label>
+                        @Html.RadioButtonFor(m => m.Gender, "Female") Female
+                    </label>
+                    <label>
+                        @Html.RadioButtonFor(m => m.Gender, "Other") Other
+                    </label>
+                    @Html.ValidationMessageFor(m => m.Gender)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email)
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+                    @Html.ValidationMessageFor(m => m.Email)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PhoneNumber)
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.PhoneNumber)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password)
+                    @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Password)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Address)
+                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Address)
+                </div>
+
+
+                <div>
+                    @Html.LabelFor(m => m.IdproofType)
+                    <select asp-for="IdproofType" class="form-control">
+                        <option value="">Select ID Proof</option>
+                        <option value="Passport">Passport</option>
+                        <option value="Driving License">Driving License</option>
+                        <option value="Aadhar Card">Aadhar Card</option>
+                        <option value="Voter ID">Voter ID</option>
+                    </select>
+                    @Html.ValidationMessageFor(m => m.IdproofType)
+                </div>
+                @* <div class="form-group">
+                    @Html.LabelFor(m => m.IdproofType)
+                    <select asp-for="IdproofType" class="form-control">
+                        <option value="">Select ID Proof</option>
+                        @foreach (var item in CBMSystem.Models.User.GetIdProofTypes())
+                        {
+                            <option value="Passport">Passport</option>
+                            <option value="Driving License">Driving License</option>
+                            <option value="Aadhar Card">Aadhar Card</option>
+                            <option value="Voter ID">Voter ID</option>
+                        }
+                    </select>
+                    @Html.ValidationMessageFor(m => m.IdproofType)
+                </div> *@
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.IdproofNumber)
+                    @Html.TextBoxFor(m => m.IdproofNumber, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.IdproofNumber)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Kycstatus)
+                    @Html.TextBoxFor(m => m.Kycstatus, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Kycstatus)
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UserType)
+                    @Html.TextBoxFor(m => m.UserType, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.UserType)
+                </div>
+
+                @* <div class="form-group">
+            @Html.LabelFor(m => m.)
+            @Html.TextBoxFor(m => m., new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.)
+            </div> 
+
+                <div class="form-group mt-3 text-center ">
+                    <input type="submit" value="Register" class="btn btn-primary mt-3" />
+            </div>*@
+
+                <div class="form-group mt-3 text-center">
+                    <button type="submit" class="btn btn-primary w-100">Register</button>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a asp-action="Login" asp-controller="User">Login Your Account</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#registrationForm").validate({
+            rules: {
+                FullName: {
+                    required: true,
+                },
+                LastName: {
+                    required: true,
+                },
+                Gender: {
+                    required: true,
+                },
+                Email: {
+                    required: true,
+                    email: true
+                },
+                PhoneNumber: {
+                    required: true,
+                    digits: true,
+                    minlength: 10
+                },
+                Password: {
+                    required: true,
+                    minlength: 6
+                },
+                IdproofType: {
+                    required: true
+                }
+            },
+            messages: {
+                FullName: "Please enter your full name.",
+                LastName: "Please enter your last name.",
+                Gender: "Please select your gender.",
+                Email: {
+                    required: "Please enter your email.",
+                    email: "Please enter a valid email address."
+                },
+                PhoneNumber: {
+                    required: "Please enter your phone number.",
+                    digits: "Please enter only digits.",
+                    minlength: "Your phone number must be at least 10 digits."
+                },
+                Password: {
+                    required: "Please enter a password.",
+                    minlength: "Your password must be at least 6 characters long."
+                },
+                IdproofType: "Please select an ID proof type."
+            }
+        });
+    });
+</script>

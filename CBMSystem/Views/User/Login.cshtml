@@ -1,0 +1,131 @@
+﻿@model CBMSystem.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "User Login";
+}
+
+<h2 class="text-center">User Login</h2>
+
+@if (TempData["SuccessM"] != null)
+{
+    <div id="SuccessM" class="dropdown-alert">@TempData["SuccessM"]</div>
+}
+
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            @using (Html.BeginForm("Login", "User", FormMethod.Post, new { @class = "card p-4 shadow" }))
+            {
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter Email" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "form-label mt-2" })
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Enter Password" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    <a asp-action="ForgotPassword" asp-controller="User">Forgot Password?</a>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-check">
+                        <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
+                        <label class="form-check-label" asp-for="RememberMe">
+                            @Html.DisplayNameFor(m => m.RememberMe)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3 text-center">
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </div>
+
+                <div class="text-center mt-3">
+                    Don't have an account?
+                    <a asp-action="Register" asp-controller="User"> Register Now</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+@* 
+<style>
+     .dropdown-alert {
+         position: fixed;
+         top: -50px;
+         left: 50%;
+         transform: translateX(-50%);
+         background-color: #28a745;
+         color: white;
+         padding: 10px 20px;
+         border-radius: 5px;
+         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+         opacity: 0;
+         transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out;
+     }
+
+         .dropdown-alert.show {
+             top: 20px;
+             opacity: 1;
+         }
+</style> *@
+
+<style>
+    .dropdown-alert {
+        position: fixed;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #28a745;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        transition: top 0.5s ease-in-out;
+        z-index: 1000;
+    }
+
+    .show {
+        top: 10px;
+    }
+</style>
+
+<!-- Login Success Message with Dropdown Effect -->
+@if (TempData["LoginSuccess"] != null)
+{
+    <div id="loginSuccessM" class="dropdown-alert">
+        @TempData["LoginSuccess"]
+    </div>
+}
+<!-- JavaScript to Show/Hide Alert -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let successAlert = document.getElementById("SuccessM");
+        if (successAlert) {
+            setTimeout(() => {
+                successAlert.classList.add("show"); // Show the alert
+                setTimeout(() => {
+                    successAlert.classList.remove("show"); // Hide after 3 sec
+                }, 3000);
+            }, 300); // Delay before showing
+        }
+    });
+</script>

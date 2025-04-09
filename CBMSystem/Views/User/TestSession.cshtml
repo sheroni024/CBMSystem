@@ -1,0 +1,11 @@
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@model CBMSystem.Models.User
+
+
+@{
+    var TestSession = Context.Session.GetString("Test");
+    ViewData["Title"] = "TestSession";
+}
+
+<h1>TestSession</h1>
+

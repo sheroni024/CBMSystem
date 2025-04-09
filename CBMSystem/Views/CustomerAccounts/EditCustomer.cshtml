@@ -1,0 +1,181 @@
+﻿@model CBMSystem.Models.CustomerAccount
+
+@{
+    ViewBag.Title = "Edit Customer";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Optimized Container */
+    .custom-container {
+        background-color: #ffffff;
+        border-radius: 10px;
+        padding: 30px 40px;
+        width: 60%;
+        margin: 40px auto;
+        transition: 0.3s ease;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+        .custom-container:hover {
+            transform: scale(1.01);
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+    .text-primary {
+        color: #007bff !important;
+    }
+
+    /* Table Styling */
+    .custom-table {
+        background-color: #ffffff;
+        width: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+        .custom-table th,
+        .custom-table td {
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
+
+        .custom-table th {
+            background-color: #e3f2fd;
+            color: #333;
+            font-weight: bold;
+            width: 35%;
+        }
+
+        .custom-table input,
+        .custom-table textarea,
+        .custom-table select {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+    /* Buttons */
+    .btn {
+        padding: 10px 18px;
+        font-size: 15px;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+        margin: 5px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: #fff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: #fff;
+    }
+
+        .btn-secondary:hover {
+            background-color: #545b62;
+        }
+</style>
+
+
+
+<div class="container mt-4 custom-container" @* style="max-width: 700px;" *@>
+    <h2 class="text-center text-primary mb-4">Edit Customer</h2>
+
+    @using (Html.BeginForm("EditCustomer", "CustomerAccounts", FormMethod.Post))
+    {
+        @* @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.CustomerId) *@
+
+        <input type="hidden" asp-for="CustomerId" />
+
+        <table class="table table-bordered custom-table">
+            <tbody>
+                <tr>
+                    <th>First Name:</th>
+                    <td><input type="text" asp-for="FirstName" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <th>Last Name:</th>
+                    <td><input type="text" asp-for="LastName" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td><input type="email" asp-for="Email" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <th>Phone:</th>
+                    <td><input type="text" asp-for="MobileNumber" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <th>PAN Card:</th>
+                    <td><input type="text" asp-for="PancardNumber" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <th>Aadhaar Number:</th>
+                    <td><input type="text" asp-for="AadhaarNumber" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <th>Address:</th>
+                    <td><textarea asp-for="Address" class="form-control"></textarea></td>
+                </tr>
+                <tr>
+                    <th>Date of Birth:</th>
+                    <td><input type="date" asp-for="DateOfBirth" class="form-control" /></td>
+                </tr>
+                <tr>
+                    <th>Gender:</th>
+                    <td>
+                        <select asp-for="Gender" class="form-control">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="@Url.Action("GetAllCustomers", "CustomerAccounts")" class="btn btn-secondary">Cancel</a>
+        </div>
+
+        @* <div class="text-center">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="@Url.Action("GetAllCustomers", "CustomerAccounts")" class="btn btn-secondary">Cancel</a>
+        </div>    <div class="col-md-12">
+                <label for="Address" class="form-label">Address</label>
+                @Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Full Address" })
+            </div>
+            <div class="col-md-6">
+                <label for="DateOfBirth" class="form-label">Date of Birth</label>
+                @Html.TextBoxFor(model => model.DateOfBirth, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            </div>
+            <div class="col-md-6">
+                <label for="Gender" class="form-label">Gender</label>
+                @Html.DropDownListFor(model => model.Gender, new SelectList(new[] { "Male", "Female", "Other" }), "Select", new { @class = "form-select" })
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-edit btn-sm">Save Changes</button>
+            <a href="@Url.Action("GetAllCustomers", "CustomerAccounts")" class="btn btn-secondary btn-sm">Cancel</a>
+        </div> *@
+    }
+</div>
+

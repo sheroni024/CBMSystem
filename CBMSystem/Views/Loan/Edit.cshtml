@@ -1,0 +1,58 @@
+﻿@model CBMSystem.Models.Loan
+
+@{
+    ViewData["Title"] = "Edit Loan";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-header text-black d-flex justify-content-between align-items-center" style="background-color:gainsboro;">
+            <h4 class="mb-0">Edit Loan</h4>
+            <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+        </div>
+
+        <div class="card-body p-4">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="LoanId" />
+
+                <div class="mb-3">
+                    <label asp-for="AccountNumber" class="form-label">Account Number</label>
+                    <input asp-for="AccountNumber" class="form-control" />
+                    <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LoanType" class="form-label">Loan Type</label>
+                    <input asp-for="LoanType" class="form-control" />
+                    <span asp-validation-for="LoanType" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LoanAmount" class="form-label">Amount</label>
+                    <input asp-for="LoanAmount" class="form-control" />
+                    <span asp-validation-for="LoanAmount" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="InterestRate" class="form-label">Interest Rate (%)</label>
+                    <input asp-for="InterestRate" class="form-control" />
+                    <span asp-validation-for="InterestRate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LoanTerm" class="form-label">Term (Years)</label>
+                    <input asp-for="LoanTerm" class="form-control" />
+                    <span asp-validation-for="LoanTerm" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DurationMonths" class="form-label">Duration (Months)</label>
+                    <input asp-for="DurationMonths" class="form-control" />
+                    <span asp-validation-for="DurationMonths" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-success">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>

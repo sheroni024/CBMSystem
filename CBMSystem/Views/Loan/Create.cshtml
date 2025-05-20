@@ -1,0 +1,214 @@
+﻿@model Loan
+
+
+@{
+    ViewData["Title"] = "Create Loan";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h2 {
+        font-weight: 700;
+        color: #343a40;
+    }
+
+    .form-card {
+        border-radius: 12px;
+        background-color: #fff;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .form-card:hover {
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        }
+
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #4caf50;
+            box-shadow: 0 0 0 0.1rem rgba(76, 175, 80, 0.2);
+        }
+
+    .btn-success {
+        border-radius: 8px;
+        padding: 10px 18px;
+        font-weight: 600;
+        font-size: 16px;
+        background-color: #28a745;
+        border: none;
+        transition: background-color 0.2s ease;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+    .text-danger.small {
+        font-size: 0.85rem;
+    }
+</style>
+
+
+<h2 class="text-center my-4">Apply for a Loan</h2>
+
+<div class="container">
+    <div class="card shadow-sm border-0 form-card mx-auto" style="max-width: 700px;">
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post" novalidate>
+
+                <div class="mb-3">
+                    <label asp-for="AccountNumber" class="form-label fw-bold">Account Number</label>
+                    <select asp-for="AccountNumber" asp-items="ViewBag.Accounts" class="form-select">
+                        <option value="">-- Select Account --</option>
+                    </select>
+                    <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LoanType" class="form-label fw-bold">Loan Type</label>
+                    <select asp-for="LoanType" class="form-select">
+                        <option value="">-- Select Loan Type --</option>
+                        <option value="Home">Home Loan</option>
+                        <option value="Car">Car Loan</option>
+                        <option value="Personal">Personal Loan</option>
+                        <option value="Education">Education Loan</option>
+                    </select>
+                    <span asp-validation-for="LoanType" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LoanAmount" class="form-label fw-bold">Loan Amount</label>
+                    <input asp-for="LoanAmount" class="form-control" />
+                    <span asp-validation-for="LoanAmount" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="InterestRate" class="form-label fw-bold">Interest Rate (%)</label>
+                    <input asp-for="InterestRate" class="form-control" />
+                    <span asp-validation-for="InterestRate" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LoanTerm" class="form-label fw-bold">Loan Term (Years)</label>
+                    <input asp-for="LoanTerm" class="form-control" />
+                    <span asp-validation-for="LoanTerm" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DurationMonths" class="form-label fw-bold">Duration (Months)</label>
+                    <input asp-for="DurationMonths" class="form-control" />
+                    <span asp-validation-for="DurationMonths" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="AppliedDate" class="form-label fw-bold">Applied Date</label>
+                    <input asp-for="AppliedDate" type="date" class="form-control" />
+                    <span asp-validation-for="AppliedDate" class="text-danger small"></span>
+                </div>
+
+                <input type="hidden" asp-for="CreatedBy" value="@Context.Session.GetInt32("UserId")" />
+
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-success">📨 Submit Loan Request</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@* @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#AccountNumberInput").on("keyup", function () {
+                var query = $(this).val();
+                if (query.length >= 1) {
+                    $.get("/Customer/GetAccountSuggestions", { prefix: query }, function (data) {
+                        var suggestionBox = $("#AccountSuggestions");
+                        suggestionBox.empty().show();
+                        $.each(data, function (i, item) {
+                            suggestionBox.append(`<a class="dropdown-item" href="#" data-value="${item.accountNumber}">${item.accountNumber} - ${item.name}</a>`);
+                        });
+                    });
+                } else {
+                    $("#AccountSuggestions").hide();
+                }
+            });
+
+            $(document).on("click", "#AccountSuggestions a", function (e) {
+                e.preventDefault();
+                var selectedNumber = $(this).data("value");
+                $("#AccountNumberInput").val(selectedNumber);
+                $("#AccountSuggestions").hide();
+
+                $.get("/Customer/GetAccountDetails", { accountNumber: selectedNumber }, function (data) {
+                    $("#CustomerName").text(data.fullName);
+                    $("#CustomerEmail").text(data.email);
+                    $("#CustomerBalance").text(data.balance);
+                    $("#CustomerCurrency").text(data.currency);
+                });
+            });
+        });
+    </script>
+} *@
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@* 
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#AccountNumberInput").on("keyup", function () {
+                var query = $(this).val();
+                if (query.length >= 1) {
+                    $.get("/Customer/GetAccountSuggestions", { prefix: query }, function (data) {
+                        var suggestionBox = $("#AccountSuggestions");
+                        suggestionBox.empty().show();
+                        $.each(data, function (i, item) {
+                            suggestionBox.append(`<a class="dropdown-item" href="#" data-value="${item.accountNumber}">${item.accountNumber} - ${item.name}</a>`);
+                        });
+                    });
+                } else {
+                    $("#AccountSuggestions").hide();
+                }
+            });
+
+            $(document).on("click", "#AccountSuggestions a", function (e) {
+                e.preventDefault();
+                var selectedNumber = $(this).data("value");
+                $("#AccountNumberInput").val(selectedNumber);
+                $("#AccountSuggestions").hide();
+
+                $.get("/Customer/GetAccountDetails", { accountNumber: selectedNumber }, function (data) {
+                    $("#CustomerName").text(data.fullName);
+                    $("#CustomerEmail").text(data.email);
+                    $("#CustomerBalance").text(data.balance);
+                    $("#CustomerCurrency").text(data.currency);
+                });
+            });
+        });
+    </script>
+}
+ *@

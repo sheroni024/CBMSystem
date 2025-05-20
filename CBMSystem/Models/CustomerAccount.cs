@@ -27,7 +27,9 @@ public partial class CustomerAccount
 
     public string? Gender { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
+
+    public string CreatedBy { get; set; } = null!;
 
     public DateTime? UpdatedAt { get; set; }
 
@@ -35,7 +37,13 @@ public partial class CustomerAccount
 
     public bool? IsDelete { get; set; }
 
+    public string? ProfileImage { get; set; }
+
+    public string? SignatureImage { get; set; }
+
     public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
 
     public virtual ICollection<DematAccount> DematAccounts { get; set; } = new List<DematAccount>();
+
+    public virtual ICollection<FraudReport> FraudReports { get; set; } = new List<FraudReport>();
 }

@@ -1,0 +1,121 @@
+﻿@model IEnumerable<CBMSystem.Models.Loan>
+@{
+    ViewData["Title"] = "Loan Management";
+}
+
+@* <a class="btn btn-primary" asp-action="Add">Add New Loan</a> *@
+
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-header text-black d-flex justify-content-between align-items-center" style="background-color:lightgray;">
+            <h4 class="mb-0">Loan Details</h4>
+            <a asp-action="Create" class="btn btn-success btn-sm">+ Apply New Loan</a>
+        </div>
+
+        <div class="card-body p-4">
+            @if (!Model.Any())
+            {
+                <div class="alert alert-warning text-center">No loans available.</div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle text-center">
+                        <thead class="text-white" style="background-color:#2c3e50;">
+                            <tr>
+                                <th>#</th>
+                                <th>Account No</th>
+                                <th>Loan Type</th>
+                                <th>Amount</th>
+                                <th>Interest (%)</th>
+                                <th>Term (Yrs)</th>
+                                <th>Duration (Months)</th>
+                                <th>Applied Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int index = 1;
+                            }
+                            @foreach (var loan in Model)
+                            {
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@loan.AccountNumber</td>
+                                    <td>@loan.LoanType</td>
+                                    <td class="text-success fw-bold">@loan.LoanAmount.ToString("N2")</td>
+                                    <td>@loan.InterestRate</td>
+                                    <td>@loan.LoanTerm</td>
+                                    <td>@loan.DurationMonths</td>
+                                    <td>@loan.AppliedDate.ToString("dd MMM yyyy")</td>
+                                    <td>
+                                        @if (loan.Status?.StatusName != null)
+                                        {
+                                            <span class="badge bg-primary">@loan.Status.StatusName</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">Pending</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@loan.LoanId" class="btn btn-sm btn-outline-warning me-1">Edit</a>
+                                        <a asp-action="Details" asp-route-id="@loan.LoanId" class="btn btn-sm btn-outline-info me-1">View</a>
+                                        <a asp-action="Delete" asp-route-id="@loan.LoanId" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure to delete this loan?');">Delete</a>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .dropdown-alert {
+        position: fixed;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #28a745;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        transition: top 0.5s ease-in-out;
+        z-index: 1000;
+    }
+
+    .show {
+        top: 10px;
+    }
+</style>
+
+<!-- Success Message for Other Actions -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let loginM = document.getElementById("loginSuccessM");
+        if (loginM) {
+            setTimeout(() => {
+                loginM.classList.add("show");
+                setTimeout(() => {
+                    loginM.classList.remove("show");
+                }, 3000); // Hides after 3 seconds
+            }, 500); // Small delay before showing
+        }
+    });
+</script>

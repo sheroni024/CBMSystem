@@ -17,9 +17,16 @@ namespace CBMSystem.Controllers
 
         public IActionResult Index()
         {
+            var transactions = _transactionRepository.GetAll();
+            return View(transactions);
+        }
+
+        public IActionResult RecentTrans()
+        {
             var transactions = _transactionRepository.GetRecent(10);
             return View(transactions);
         }
+
         [HttpGet]
         public IActionResult Add()
         {
@@ -44,7 +51,9 @@ namespace CBMSystem.Controllers
         {
             if (transaction != null)
             {
+                transaction.CreatedBy = User.Identity?.Name ?? "System"; 
                 _transactionRepository.Add(transaction);
+                TempData["SuccessMessage"] = "Transaction Successed!";
                 return RedirectToAction("Index");
             }
 
@@ -60,6 +69,39 @@ namespace CBMSystem.Controllers
             "Challan Payment", "Insurance Payment", "Loan Installment", "Deposit", "Withdrawal"
             };
             return View(transaction);
+        }
+        
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var transaction = _transactionRepository.GetById(id);
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            return View(transaction);
+        }
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var transaction = _transactionRepository.GetById(id);
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            return View(transaction);
+        }
+
+        // DELETE - POST
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            _transactionRepository.Delete(id);
+            TempData["SuccessMessage"] = "Transaction Deleted Successfully!";
+            return RedirectToAction("Index");
         }
     }
 }

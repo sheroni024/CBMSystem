@@ -1,0 +1,47 @@
+﻿@model IEnumerable<CBMSystem.Models.FraudReport>
+
+<table class="table table-bordered table-hover mt-3">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Customer ID</th>
+            <th>Fraud Type</th>
+            <th>Action Taken</th>
+            <th>Reported Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="5" class="text-center text-muted">No investigation reports found.</td>
+            </tr>
+        }
+        else
+        {
+            var idx = 1;
+            foreach (var r in Model)
+            {
+                <tr>
+                    <td>@idx</td>
+                    <td>@r.CustomerId</td>
+                    <td>@r.FraudType?.TypeName</td>
+                    <td>Under Investigation</td>
+                    @* <td>
+                        @r.FraudActions.OrderByDescending(a => a.ActionDate)
+                        .FirstOrDefault()?.ActionTaken ?? "No actions"
+                    </td> *@
+                    <td>@r.ReportedDate.ToString("dd MMM yyyy")</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary"
+                           href="@Url.Action("Details", "Reports", new { type = "fraud", id = r.FraudReportId })">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </td>
+                </tr>
+                idx++;
+            }
+        }
+    </tbody>
+</table>

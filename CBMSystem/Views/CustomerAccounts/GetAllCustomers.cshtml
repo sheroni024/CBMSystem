@@ -1,4 +1,19 @@
 ﻿@model IEnumerable<CustomerAccount>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@* @if (Model.ProfileImage != null)
+{
+    <img src="data:image/png;base64,@Convert.ToBase64String(Model.ProfileImage)" class="img-thumbnail" style="max-width:150px;" />
+}
+
+@if (Model.SignatureImage != null)
+{
+    <img src="data:image/png;base64,@Convert.ToBase64String(Model.SignatureImage)" class="img-thumbnail" style="max-width:150px;" />
+} *@
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +45,7 @@
             .custom-container:hover {
                 transform: translateY(-5px);
                 box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-                background-color: darkgr; /* Light Gray on Hover */
+                background-color: darkgray; /* Light Gray on Hover */
             }
 
         /* Custom Table Styling with Hover */
@@ -169,6 +184,17 @@
             .btn-delete:hover {
                 background-color: #bd2130;
             }
+
+        .btn-download {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+            .btn-download:hover {
+                background-color: #138496;
+                color: white;
+            }
+
     </style>
 </head>
 <body>
@@ -183,7 +209,7 @@
                     <th>ID</th>
                     <th>Full Name</th>
                     <th>Email</th>
-                    <th>Phone</th>
+                    <th>AccountNumber</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -194,7 +220,7 @@
                         <td>@customer.CustomerId</td>
                         <td>@customer.FirstName @customer.LastName</td>
                         <td>@customer.Email</td>
-                        <td>@customer.MobileNumber</td>
+                        <td>@customer.AccountNumber</td>
                         <td>
                                 <a href="@Url.Action("GetCustomerById", "CustomerAccounts", new { id = customer.CustomerId })"
                                    class="btn btn-sm btn-view">
@@ -209,6 +235,10 @@
                                    onclick="return confirm('Are you sure you want to delete this customer?');">
                                     Delete
                                 </a>
+                                <a >
+                                    <button class="btn btn-primary" onclick="showDownloadModal('@customer.CustomerId')">Download Transactions</button>
+
+                                </a>
                         </td>
                     </tr>
                 }
@@ -218,6 +248,106 @@
     </div>
 </body>
 </html>
+
+
+<!-- Modal for selecting months -->
+
+
+<!-- Trigger button -->
+<button class="btn btn-primary" onclick="showDownloadModal(@Model.First().CustomerId)">Download Transactions</button>
+
+<!-- Modal -->
+<div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="downloadForm" method="get">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="downloadModalLabel">Download Transactions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="customerId" name="customerId" />
+
+                    <div class="mb-3">
+                        <label for="months" class="form-label">Select months:</label>
+                        <select class="form-select" id="months" name="months" required>
+                            <option value="1">Last 1 Month</option>
+                            <option value="3">Last 3 Months</option>
+                            <option value="6">Last 6 Months</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Choose format:</label>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-primary" onclick="submitDownload('pdf')">Download PDF</button>
+                            <button type="button" class="btn btn-outline-success" onclick="submitDownload('csv')">Download CSV</button>
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showDownloadModal(customerId) {
+        document.getElementById('customerId').value = customerId;
+        const modal = new bootstrap.Modal(document.getElementById('downloadModal'));
+        modal.show();
+    }
+
+    function submitDownload(format) {
+        const customerId = document.getElementById('customerId').value;
+        const months = document.getElementById('months').value;
+
+        if (months <= 0) {
+            alert("Please select a valid number of months.");
+            return;
+        }
+
+        const url = `/CustomerAccounts/DownloadTransactions${format.toUpperCase()}?customerId=${customerId}&months=${months}`;
+        window.location.href = url;
+    }
+</script>
+
+<!-- Transaction Download Modal -->
+@* <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form id="downloadForm" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Download Transaction History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Select transaction history range:</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="months" value="1" id="month1" checked>
+                        <label class="form-check-label" for="month1">Last 1 month</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="months" value="2" id="month2">
+                        <label class="form-check-label" for="month2">Last 2 months</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="months" value="3" id="month3">
+                        <label class="form-check-label" for="month3">Last 3 months</label>
+                    </div>
+
+                    <input type="hidden" name="customerId" id="downloadCustomerId" />
+                    <input type="hidden" name="accountNumber" id="downloadAccountNumber" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Download</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> *@
 
 
 <style>
@@ -257,3 +387,30 @@
     </script>
 }
 
+@* @section Scripts {
+    <script>
+        function openDownloadModal(button) {
+            const customerId = button.getAttribute("data-customer-id");
+            const accountNumber = button.getAttribute("data-account-number");
+
+            document.getElementById("downloadCustomerId").value = customerId;
+            document.getElementById("downloadAccountNumber").value = accountNumber;
+
+            new bootstrap.Modal(document.getElementById('downloadModal')).show();
+        }
+
+        document.getElementById("downloadForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const customerId = form.customerId.value;
+            const accountNumber = form.accountNumber.value;
+            const months = form.months.value;
+
+            // Redirect to controller action to generate download
+            const url = `/CustomerAccounts/DownloadTransactions?accountNumber=${accountNumber}&months=${months}`;
+            window.location.href = url;
+        });
+    </script>
+}
+ *@

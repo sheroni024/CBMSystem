@@ -1,0 +1,51 @@
+﻿@model CBMSystem.Models.Loan
+
+@{
+    ViewData["Title"] = "Loan Details";
+}
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-sm border-0" style="max-width: 600px; width: 100%;">
+        <div class="card-header text-black d-flex justify-content-between align-items-center" style="background-color:gainsboro;">
+            <h4 class="mb-0">Loan Details</h4>
+            <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+        </div>
+
+        <div class="card-body p-4">
+            <dl class="row">
+                <dt class="col-sm-4">Account Number</dt>
+                <dd class="col-sm-8">@Model.AccountNumber</dd>
+
+                <dt class="col-sm-4">Loan Type</dt>
+                <dd class="col-sm-8">@Model.LoanType</dd>
+
+                <dt class="col-sm-4">Loan Amount</dt>
+                <dd class="col-sm-8">₹@Model.LoanAmount.ToString("N2")</dd>
+
+                <dt class="col-sm-4">Interest Rate</dt>
+                <dd class="col-sm-8">@Model.InterestRate %</dd>
+
+                <dt class="col-sm-4">Loan Term (Years)</dt>
+                <dd class="col-sm-8">@Model.LoanTerm</dd>
+
+                <dt class="col-sm-4">Duration (Months)</dt>
+                <dd class="col-sm-8">@Model.DurationMonths</dd>
+
+                <dt class="col-sm-4">Applied Date</dt>
+                <dd class="col-sm-8">@Model.AppliedDate.ToString("dd MMM yyyy")</dd>
+
+                <dt class="col-sm-4">Status</dt>
+                <dd class="col-sm-8">
+                    @if (Model.Status?.StatusName != null)
+                    {
+                        <span class="badge bg-primary">@Model.Status.StatusName</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Pending</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>

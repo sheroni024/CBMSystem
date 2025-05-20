@@ -1,0 +1,40 @@
+﻿@model CBMSystem.Models.Transaction
+@{
+    ViewData["Title"] = "Transaction Details";
+}
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-sm border-0" style="max-width: 600px; width: 100%;">
+        <div class="card-header text-black d-flex justify-content-between align-items-center" style="background-color:gainsboro;">
+            <h4 class="mb-0">Transaction Details</h4>
+            <a asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+        </div>
+
+        <div class="card-body p-4">
+            <dl class="row">
+                <dt class="col-sm-5">Account Number</dt>
+                <dd class="col-sm-7">@Model.AccountNumber</dd>
+
+                <dt class="col-sm-5">Transaction Type</dt>
+                <dd class="col-sm-7">@Model.TransactionType</dd>
+
+                <dt class="col-sm-5">Amount</dt>
+                <dd class="col-sm-7">₹@Model.Amount.ToString("N2")</dd>
+
+                <dt class="col-sm-5">Reference Number</dt>
+                <dd class="col-sm-7">@Model.ReferenceNumber</dd>
+
+                <dt class="col-sm-5">Transaction Date</dt>
+                <dd class="col-sm-7">@Model.TransactionDate.ToString("dd MMM yyyy")</dd>
+
+                <dt class="col-sm-5">Balance After</dt>
+                <dd class="col-sm-7">₹@Model.BalanceAfterTransaction.ToString("N2")</dd>
+
+                <dt class="col-sm-5">Created By</dt>
+                <dd class="col-sm-7">@Model.CreatedBy</dd>
+            </dl>
+
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</div>

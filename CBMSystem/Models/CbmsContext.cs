@@ -29,7 +29,15 @@ public partial class CbmsContext : DbContext
 
     public virtual DbSet<DematAccount> DematAccounts { get; set; }
 
+    public virtual DbSet<EmailSetting> EmailSettings { get; set; }
+
     public virtual DbSet<Employee> Employees { get; set; }
+
+    public virtual DbSet<FraudAction> FraudActions { get; set; }
+
+    public virtual DbSet<FraudReport> FraudReports { get; set; }
+
+    public virtual DbSet<FraudType> FraudTypes { get; set; }
 
     public virtual DbSet<Investment> Investments { get; set; }
 
@@ -56,15 +64,18 @@ public partial class CbmsContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
+            entity.HasIndex(e => e.AccountNumber, "UQ_Accounts_AccountNumber").IsUnique();
+
             entity.Property(e => e.AccountId).HasColumnName("AccountID");
-            entity.Property(e => e.AccountNumber)
-                .HasMaxLength(20)
-                .IsUnicode(false);
+            entity.Property(e => e.AccountNumber).HasMaxLength(50);
             entity.Property(e => e.AccountType)
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.Balance).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.BranchCodeId).HasColumnName("BranchCodeID");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
             entity.Property(e => e.Currency)
                 .HasMaxLength(20)
@@ -73,18 +84,10 @@ public partial class CbmsContext : DbContext
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
-            entity.HasOne(d => d.BranchCode).WithMany(p => p.Accounts)
-                .HasForeignKey(d => d.BranchCodeId)
-                .HasConstraintName("FK_Accounts_Branch");
-
             entity.HasOne(d => d.Customer).WithMany(p => p.Accounts)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Accounts_CustomerAccounts");
-
-            entity.HasOne(d => d.Status).WithMany(p => p.Accounts)
-                .HasForeignKey(d => d.StatusId)
-                .HasConstraintName("FK_Accounts_Status");
         });
 
         modelBuilder.Entity<Authentication>(entity =>
@@ -201,13 +204,12 @@ public partial class CbmsContext : DbContext
             entity.Property(e => e.AadhaarNumber)
                 .HasMaxLength(20)
                 .IsUnicode(false);
-            entity.Property(e => e.AccountNumber)
-                .HasMaxLength(50)
-                .IsUnicode(false);
+            entity.Property(e => e.AccountNumber).HasMaxLength(50);
             entity.Property(e => e.Address).HasColumnType("text");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .IsUnicode(false);
@@ -227,6 +229,8 @@ public partial class CbmsContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("PANCardNumber");
+            entity.Property(e => e.ProfileImage).IsUnicode(false);
+            entity.Property(e => e.SignatureImage).IsUnicode(false);
             entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
         });
 
@@ -249,6 +253,9 @@ public partial class CbmsContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.Panlinked)
                 .HasDefaultValue(false)
@@ -260,6 +267,17 @@ public partial class CbmsContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.DematAccounts)
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("FK_Customer_Demat");
+        });
+
+        modelBuilder.Entity<EmailSetting>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__EmailSet__3214EC0788E17DAF");
+
+            entity.Property(e => e.EnableSsl).HasColumnName("EnableSSL");
+            entity.Property(e => e.FromEmail).HasMaxLength(255);
+            entity.Property(e => e.Host).HasMaxLength(255);
+            entity.Property(e => e.Password).HasMaxLength(255);
+            entity.Property(e => e.Username).HasMaxLength(255);
         });
 
         modelBuilder.Entity<Employee>(entity =>
@@ -294,6 +312,60 @@ public partial class CbmsContext : DbContext
                 .HasConstraintName("FK_Employee_Branch");
         });
 
+        modelBuilder.Entity<FraudAction>(entity =>
+        {
+            entity.HasKey(e => e.FraudActionId).HasName("PK__FraudAct__177679FBCF2A5065");
+
+            entity.ToTable("FraudAction");
+
+            entity.Property(e => e.ActionDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.FraudReport).WithMany(p => p.FraudActions)
+                .HasForeignKey(d => d.FraudReportId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_FraudAction_FraudReport");
+
+            entity.HasOne(d => d.PerformedByNavigation).WithMany(p => p.FraudActions)
+                .HasForeignKey(d => d.PerformedBy)
+                .HasConstraintName("FK_FraudAction_Users");
+        });
+
+        modelBuilder.Entity<FraudReport>(entity =>
+        {
+            entity.HasKey(e => e.FraudReportId).HasName("PK__FraudRep__85081F260DF700F7");
+
+            entity.ToTable("FraudReport");
+
+            entity.Property(e => e.AccountNumber).HasMaxLength(30);
+            entity.Property(e => e.ReportedDate)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .HasDefaultValue("Received");
+
+            entity.HasOne(d => d.Customer).WithMany(p => p.FraudReports)
+                .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_FraudReport_CustomerAccounts");
+
+            entity.HasOne(d => d.FraudType).WithMany(p => p.FraudReports)
+                .HasForeignKey(d => d.FraudTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_FraudReport_FraudType");
+        });
+
+        modelBuilder.Entity<FraudType>(entity =>
+        {
+            entity.HasKey(e => e.FraudTypeId).HasName("PK__FraudTyp__F1C222E31D1DBF5F");
+
+            entity.ToTable("FraudType");
+
+            entity.Property(e => e.TypeName).HasMaxLength(100);
+        });
+
         modelBuilder.Entity<Investment>(entity =>
         {
             entity.HasKey(e => e.InvestmentId).HasName("PK__Investme__91D937AB62D849B7");
@@ -302,6 +374,9 @@ public partial class CbmsContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.CreatedBy)
+                .HasMaxLength(50)
+                .IsUnicode(false);
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.DematId).HasColumnName("DematID");
             entity.Property(e => e.InvestmentAmount).HasColumnType("decimal(15, 2)");
@@ -328,10 +403,12 @@ public partial class CbmsContext : DbContext
 
         modelBuilder.Entity<Loan>(entity =>
         {
-            entity.Property(e => e.LoanId)
-                .ValueGeneratedNever()
-                .HasColumnName("LoanID");
+            entity.Property(e => e.LoanId).HasColumnName("LoanID");
+            entity.Property(e => e.AccountNumber)
+                .HasMaxLength(20)
+                .IsUnicode(false);
             entity.Property(e => e.AppliedDate).HasColumnType("datetime");
+            entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.InterestRate).HasColumnType("decimal(5, 2)");
             entity.Property(e => e.IsActive).HasColumnName("isActive");
             entity.Property(e => e.IsDelete).HasColumnName("isDelete");
@@ -341,15 +418,10 @@ public partial class CbmsContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.Status).WithMany(p => p.Loans)
                 .HasForeignKey(d => d.StatusId)
                 .HasConstraintName("FK_Loans_Status");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Loans)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_Loans_Users");
         });
 
         modelBuilder.Entity<Notification>(entity =>
@@ -450,16 +522,11 @@ public partial class CbmsContext : DbContext
 
         modelBuilder.Entity<Transaction>(entity =>
         {
-            entity.HasKey(e => e.BranchCodeId);
-
-            entity.Property(e => e.BranchCodeId)
-                .ValueGeneratedNever()
-                .HasColumnName("BranchCodeID");
-            entity.Property(e => e.AccountNumber)
-                .HasMaxLength(20)
-                .IsUnicode(false);
+            entity.Property(e => e.TransactionId).HasColumnName("TransactionID");
+            entity.Property(e => e.AccountNumber).HasMaxLength(50);
             entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.BalanceAfterTransaction).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.BranchCodeId).HasColumnName("BranchCodeID");
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
             entity.Property(e => e.Description)
                 .HasMaxLength(255)
@@ -469,13 +536,18 @@ public partial class CbmsContext : DbContext
                 .IsUnicode(false);
             entity.Property(e => e.StatusId).HasColumnName("StatusID");
             entity.Property(e => e.TransactionDate).HasColumnType("datetime");
-            entity.Property(e => e.TransactionId).HasColumnName("TransactionID");
             entity.Property(e => e.TransactionType)
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
-            entity.HasOne(d => d.BranchCode).WithOne(p => p.Transaction)
-                .HasForeignKey<Transaction>(d => d.BranchCodeId)
+            entity.HasOne(d => d.AccountNumberNavigation).WithMany(p => p.Transactions)
+                .HasPrincipalKey(p => p.AccountNumber)
+                .HasForeignKey(d => d.AccountNumber)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Transactions_Accounts");
+
+            entity.HasOne(d => d.BranchCode).WithMany(p => p.Transactions)
+                .HasForeignKey(d => d.BranchCodeId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Transactions_Branch");
 
@@ -486,7 +558,9 @@ public partial class CbmsContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.UserId)
+                .ValueGeneratedNever()
+                .HasColumnName("UserID");
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
                 .IsUnicode(false);

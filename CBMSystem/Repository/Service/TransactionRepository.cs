@@ -3,7 +3,7 @@ using CBMSystem.Repository.Interface;
 
 namespace CBMSystem.Repository.Service
 {
-    public class TransactionRepository : ITransaction
+    public class    TransactionRepository : ITransaction
     {
         private readonly CbmsContext _context;
         public TransactionRepository(CbmsContext context)
@@ -29,6 +29,16 @@ namespace CBMSystem.Repository.Service
                 .ToList();
         }
 
+        public void Delete(long id)
+        {
+            var loan = _context.Transactions.Find(id);
+            //if (loan != null)
+            //{
+            //    loan.IsDelete = true;
+            //    _context.SaveChanges();
+            //}
+        }
+
         public Transaction GetById(int id)
         {
             return _context.Transactions.FirstOrDefault(t => t.TransactionId == id);
@@ -48,6 +58,24 @@ namespace CBMSystem.Repository.Service
                 .Select(a => a.AccountNumber)
                 .ToList() ?? new List<string>();
 
+        }
+        public int GetAllTrans()
+        {
+            return _context.Transactions.Count();
+        }
+
+        public IEnumerable<Transaction> GetAll()
+        {
+            return _context.Transactions
+                .OrderByDescending(t => t.TransactionDate)
+                .ToList();
+        }
+
+        public IEnumerable<Transaction> GetAllByUser(string email)
+        {
+            return _context.Transactions
+                .Where(t => t.CreatedBy == email)
+                .ToList();
         }
     }
 }

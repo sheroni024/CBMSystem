@@ -1,0 +1,206 @@
+﻿@{
+    ViewData["Title"] = "Reports Dashboard";
+}
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+
+<style>
+    body {
+        background-color: #f7f9fc;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1e3c72;
+    }
+
+    .welcome {
+        font-size: 24px;
+        font-weight: 600;
+        color: #2a5298;
+    }
+
+    .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease-in-out;
+    }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+    .card-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #1e3c72;
+    }
+
+    .card-text {
+        font-size: 25px;
+        font-weight: bold;
+        color: #2a5298;
+    }
+
+    .btn-primary {
+        background-color: #1e3c72;
+        border: none;
+        transition: background-color 0.3s;
+    }
+
+        .btn-primary:hover {
+            background-color: #163360;
+        }
+</style>
+
+@{
+    ViewData["Title"] = "Reports Dashboard";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center">Reports Dashboard</h1>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("GetItems", "Reports", new { type = "customer" })"
+                   class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-users"></i> Customers Report</h5>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("GetItems", "Reports", new { type = "loan" })"
+                   class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-file-invoice-dollar"></i> Loans Report</h5>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("GetItems", "Reports", new { type = "transaction" })"
+                   class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-exchange-alt"></i> Transactions Report</h5>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-3">
+        <div class="col-md-6">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("GetItems", "Reports", new { type = "demat" })"
+                   class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-coins"></i> Demat Report</h5>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("GetItems", "Reports", new { type = "investment" })"
+                   class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-chart-pie"></i> Investment Report</h5>
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-md-12">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("GetItems", "Reports", new { type = "fraud" })"
+                   class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-chart-pie"></i> Investigation Report</h5>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container for the partials -->
+    <div id="reportContent" class="mt-4"></div>
+</div>
+
+@section Scripts {
+    <script>
+        // hijack all those links to load via AJAX
+        document.querySelectorAll('a[href*="GetItems"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                fetch(a.href)
+                    .then(r => r.text())
+                    .then(html => document.getElementById('reportContent').innerHTML = html)
+                    .catch(err => console.error(err));
+            });
+        });
+    </script>
+}
+<div id="fraudReportContainer"></div>
+
+<script>
+    function loadFraud(customerId) {
+      fetch(`/Reports/GetItems?type=fraud&customerId=${customerId}`)
+        .then(r => r.text())
+        .then(html => document.getElementById('fraudReportContainer').innerHTML = html);
+    }
+</script>
+
+
+@* 
+<div class="container mt-5">
+    <h1 class="text-center">Reports Dashboard</h1>
+    <p></p>
+    @* <h2 class="welcome text-center mb-4">Welcome, @ViewBag.UserFullName</h2> *@
+@* 
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("GetItems", "Reports")" , new { type="customer" })" class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-users"></i> Customers Report</h5>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("Loan", "Reports")" class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-file-invoice-dollar"></i> Loans Report</h5>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("Transaction", "Reports")" class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-exchange-alt"></i> Transactions Report</h5>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mt-3">
+        <div class="col-md-6">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("Demat", "Reports")" class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-coins"></i> Demat Report</h5>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-4 text-center">
+                <a href="@Url.Action("Investment", "Reports")" class="text-decoration-none text-dark">
+                    <h5 class="card-title"><i class="fas fa-chart-pie"></i> Investment Report</h5>
+                </a>
+            </div>
+        </div>
+    </div>
+</div> *@
+ 

@@ -1,5 +1,49 @@
 ﻿@model CustomerAccount
 
+@{
+    ViewData["Title"] = "Customer Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* @if (!string.IsNullOrEmpty(Model.ProfileImage))
+{
+    <div class="mb-3">
+        <label>Profile Image</label><br />
+        <img src="@Model.ProfileImage" class="img-thumbnail" width="150" />
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.SignatureImage))
+{
+    <div class="mb-3">
+        <label>Signature</label><br />
+        <img src="@Model.SignatureImage" class="img-thumbnail" width="150" />
+    </div>
+} *@
+
+
+
+@section Styles {
+    <style>
+        .img-thumbnail {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+
+            /* border-radius: 0.5rem;
+            border: 1px solid #ddd;
+            padding: 4px;
+            max-height: 150px; */
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+    </style>
+}
+
+
 <div class="container mt-4 custom-container">
     <h2 class="text-center text-primary">Customer Details</h2>
 
@@ -43,6 +87,26 @@
             </tr>
         </tbody>
     </table>
+
+   @*  <img src="@Model.ProfileImage" class="img-thumbnail" alt="Profile Image" width="150" />
+    <img src="@Model.SignatureImage" class="img-thumbnail" alt="Signature Image" width="150" /> *@
+
+    <div class="row mt-4">
+        <div class="col-md-6 text-center">
+            <h5>Profile Image</h5>
+            <img src="https://localhost:7120/uploads/customers/@Model.ProfileImage"
+                 alt="Profile Image"
+                 class="img-fluid img-thumbnail rounded shadow-sm"
+                 style="max-height: 200px;" />
+        </div>
+        <div class="col-md-6 text-center">
+            <h5>Signature Image</h5>
+            <img src="https://localhost:7120/uploads/customers/@Model.SignatureImage"
+                 alt="Signature Image"
+                 class="img-fluid img-thumbnail rounded shadow-sm"
+                 style="max-height: 200px;" />
+        </div>
+    </div>
 
     <!-- Action Buttons -->
     <div class="text-center">
@@ -156,6 +220,6 @@
     }
 
         .btn-secondary:hover {
-            background-color: #545b
+            background-color: #545b}
 
 </style>

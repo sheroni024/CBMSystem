@@ -45,7 +45,7 @@ public partial class User
 
     public virtual ICollection<Authentication> Authentications { get; set; } = new List<Authentication>();
 
-    public virtual ICollection<Loan> Loans { get; set; } = new List<Loan>();
+    public virtual ICollection<FraudAction> FraudActions { get; set; } = new List<FraudAction>();
 
     public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 

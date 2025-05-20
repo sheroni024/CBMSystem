@@ -27,6 +27,8 @@ public partial class Transaction
 
     public string CreatedBy { get; set; } = null!;
 
+    public virtual Account AccountNumberNavigation { get; set; } = null!;
+
     public virtual Branch BranchCode { get; set; } = null!;
 
     public virtual Status? Status { get; set; }

@@ -1,0 +1,52 @@
+﻿@model IEnumerable<CBMSystem.Models.CustomerAccount>
+
+<div class="card shadow-sm border-0">
+    <div class="card-header d-flex justify-content-between align-items-center bg-light">
+        <h4 class="mb-0">Customer Report</h4>
+    </div>
+    <div class="card-body">
+        @if (!Model.Any())
+        {
+            <div class="alert alert-warning text-center">No customer data found.</div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle text-center">
+                    <thead class="text-white" style="background-color:#2c3e50;">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Account No</th>
+                            <th>Email</th>
+                            <th>Joined Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int index = 1;
+                        }
+                        @foreach (var customer in Model)
+                        {
+                            <tr>
+                                <td>@index</td>
+                                <td>@customer.FirstName @customer.LastName</td>
+                                <td>@customer.AccountNumber</td>
+                                <td>@customer.Email</td>
+                                <td>@customer.CreatedAt.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary"
+                                       href="@Url.Action("Details", "Reports", new { type = "customer", id = customer.CustomerId })">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
+                                </td>
+                            </tr>
+                            index++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

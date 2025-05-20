@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "Download Reports";
+}
+
+<h3>📊 Export Reports</h3>
+
+<form method="post" asp-action="Download">
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label>Main Module</label>
+            <select id="mainModule" name="mainModule" class="form-select" onchange="updateSubModules()">
+                <option value="Customer">Customer</option>
+                <option value="Transaction">Transaction</option>
+                <option value="Loan">Loan</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>Sub Module</label>
+            <select id="subModule" name="subModule" class="form-select">
+                <option value="AddCustomer">AddCustomer</option>
+                <option value="DematAccount">DematAccount</option>
+                <option value="Investment">Investment</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>File Format</label>
+            <select name="format" class="form-select">
+                <option value="csv">CSV</option>
+                <option value="txt">Text</option>
+                <option value="pdf">PDF</option>
+            </select>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success mt-2">
+        <i class="fas fa-download"></i> Download
+    </button>
+</form>
+
+@section Scripts {
+    <script>
+        function updateSubModules() {
+            const sub = document.getElementById("subModule");
+            const main = document.getElementById("mainModule").value;
+
+            sub.innerHTML = "";
+
+            if (main === "Customer") {
+                sub.innerHTML += `<option value="AddCustomer">AddCustomer</option>`;
+                sub.innerHTML += `<option value="DematAccount">DematAccount</option>`;
+                sub.innerHTML += `<option value="Investment">Investment</option>`;
+            } else {
+                sub.innerHTML += `<option value="All">All</option>`;
+            }
+        }
+    </script>
+}

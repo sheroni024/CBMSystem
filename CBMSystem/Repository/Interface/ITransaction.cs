@@ -7,7 +7,11 @@ namespace CBMSystem.Repository.Interface
         void Add(Transaction transaction);
         List<Transaction> GetRecent(int count);
         Transaction GetById(int id);
+        void Delete(long id);
         List<Transaction> GetByAccount(string accountNumber);
         List<string> GetAccountNumbers();
+        int GetAllTrans();
+        IEnumerable<Transaction> GetAll();
+        IEnumerable<Transaction> GetAllByUser(string email);
     }
 }

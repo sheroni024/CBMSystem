@@ -1,0 +1,306 @@
+﻿@* @model List<Transaction>
+@{
+    ViewData["Title"] = "Recent Transactions";
+}
+
+<h2 class="mb-4">Recent Transactions</h2>
+
+<div class="row">
+    @foreach (var tx in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">@tx.TransactionType</h5>
+                    <h6 class="card-subtitle text-muted mb-2">₹ @tx.Amount</h6>
+                    <p class="card-text">
+                        <strong>Account:</strong> @tx.AccountNumber<br />
+                        <strong>Reference:</strong> @tx.ReferenceNumber<br />
+                        <strong>Date:</strong> @tx.TransactionDate.ToString("dd-MMM-yyyy")<br />
+                        <strong>Balance:</strong> ₹ @tx.BalanceAfterTransaction
+                    </p>
+                    <p class="text-muted small">@tx.Description</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<a class="btn btn-primary" asp-action="Add">Add New Transaction</a>
+ *@
+
+
+ @model List<Transaction>
+
+<a class="btn btn-primary" asp-action="Add">Add New Transaction</a>
+<br /><br />
+
+@{
+    ViewData["Title"] = "Recent Transactions";
+}
+
+<h2 class="mb-4">Recent Transactions</h2>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+    @foreach (var tx in Model.Take(12)) // Change the number based on how many you want to show
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 rounded-4">
+                <div class="card-body">
+                    <h5 class="card-title text-primary mb-3">
+                        Transaction ID: @tx.TransactionId
+                    </h5>
+                    <p class="mb-2"><strong>Account:</strong> @tx.AccountNumber</p>
+                    <p class="mb-2"><strong>Type:</strong> @tx.TransactionType</p>
+                    <p class="mb-2"><strong>Amount:</strong> @String.Format("{0:C}", tx.Amount)</p>
+                    <p class="mb-2"><strong>Date:</strong> @tx.TransactionDate.ToString("yyyy-MM-dd")</p>
+                    <p class="mb-2"><strong>Reference No.:</strong> @tx.ReferenceNumber</p>
+                    <p class="mb-2"><strong>Balance:</strong> @String.Format("{0:C}", tx.BalanceAfterTransaction)</p>
+                    <p class="mb-0"><strong>Description:</strong> @tx.Description</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 text-end">
+                    <button class="btn btn-outline-danger btn-sm">
+                        <i class="fa fa-trash"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Styles {
+    <style>
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .card-body p {
+            font-size: 0.9rem;
+        }
+
+        .card-footer .btn {
+            border-radius: 4px;
+        }
+
+        h2 {
+            color: #333;
+        }
+    </style>
+}
+
+<style>
+    .dropdown-alert {
+        position: fixed;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #28a745;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        font-size: 16px;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        transition: top 0.5s ease-in-out;
+        z-index: 1000;
+    }
+
+    .show {
+        top: 10px;
+    }
+</style>
+
+<!-- Success Message for Other Actions -->
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let loginM = document.getElementById("loginSuccessM");
+        if (loginM) {
+            setTimeout(() => {
+                loginM.classList.add("show");
+                setTimeout(() => {
+                    loginM.classList.remove("show");
+                }, 3000); // Hides after 3 seconds
+            }, 500); // Small delay before showing
+        }
+    });
+</script>
+
+
+@* 
+
+@{
+    ViewData["Title"] = "Transactions";
+}
+
+<h2 class="mb-4">Transaction List</h2>
+
+<!-- Locale Dropdown -->
+<div class="select mb-3">
+    <label for="locale" class="form-label">Select Locale</label>
+    <select id="locale" class="form-control">
+        <option value="en-US" selected>en-US</option>
+        <option value="fr-FR">fr-FR</option>
+        <option value="de-DE">de-DE</option>
+        <option value="es-ES">es-ES</option>
+        <!-- Add other languages as needed -->
+    </select>
+</div>
+
+<!-- Toolbar -->
+<div id="toolbar" class="mb-3">
+    <button id="remove" class="btn btn-danger" disabled>
+        <i class="fa fa-trash"></i> Delete Selected
+    </button>
+</div>
+
+<!-- Bootstrap Table -->
+<table id="table"
+       data-toolbar="#toolbar"
+       data-search="true"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-show-fullscreen="true"
+       data-show-columns="true"
+       data-show-export="true"
+       data-click-to-select="true"
+       data-pagination="true"
+       data-id-field="transactionId"
+       data-page-list="[10, 25, 50, 100, all]"
+       data-side-pagination="client"
+       data-url="/your/api/endpoint" <!-- Replace this -->
+    data-response-handler="responseHandler"
+    class="table table-bordered"
+>
+</table>
+
+@section Scripts {
+    <!-- Required JS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.29.0/tableExport.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.24.1/dist/bootstrap-table.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.24.1/dist/bootstrap-table-locale-all.min.js"></script>
+
+    <script>
+        const $table = $('#table');
+        const $remove = $('#remove');
+        let selections = [];
+
+        function getIdSelections () {
+            return $.map($table.bootstrapTable('getSelections'), function (row) {
+                return row.transactionId;
+            });
+        }
+
+        window.responseHandler = res => {
+            $.each(res.rows, function (i, row) {
+                row.state = $.inArray(row.transactionId, selections) !== -1;
+            });
+            return res;
+        };
+
+        window.detailFormatter = (index, row) => {
+            const html = [];
+            $.each(row, function (key, value) {
+                html.push(`<p><b>${key}:</b> ${value}</p>`);
+            });
+            return html.join('');
+        };
+
+        function operateFormatter () {
+            return [
+                '<a class="like text-danger" href="javascript:void(0)" title="Like">',
+                '<i class="fa fa-heart"></i>',
+                '</a>  ',
+                '<a class="remove text-danger" href="javascript:void(0)" title="Remove">',
+                '<i class="fa fa-trash"></i>',
+                '</a>'
+            ].join('');
+        }
+
+        window.operateEvents = {
+            'click .like': function (e, value, row) {
+                alert(`Liked transaction: ${JSON.stringify(row)}`);
+            },
+            'click .remove': function (e, value, row) {
+                $table.bootstrapTable('remove', {
+                    field: 'transactionId',
+                    values: [row.transactionId]
+                });
+            }
+        };
+
+        function initTable () {
+            $table.bootstrapTable('destroy').bootstrapTable({
+                locale: $('#locale').val(),
+                columns: [
+                    [
+                        { field: 'state', checkbox: true, align: 'center', valign: 'middle' },
+                        { field: 'transactionId', title: 'Transaction ID', sortable: true },
+                        { field: 'accountNumber', title: 'Account Number', sortable: true },
+                        { field: 'transactionType', title: 'Type' },
+                        { field: 'amount', title: 'Amount', sortable: true },
+                        { field: 'referenceNumber', title: 'Ref No.' },
+                        { field: 'transactionDate', title: 'Date' },
+                        { field: 'description', title: 'Description' },
+                        { field: 'balanceAfterTransaction', title: 'Balance' },
+                        { field: 'operate', title: 'Actions', align: 'center', clickToSelect: false, events: window.operateEvents, formatter: operateFormatter }
+                    ]
+                ]
+            });
+
+            $table.on('check.bs.table uncheck.bs.table check-all.bs.table uncheck-all.bs.table', function () {
+                $remove.prop('disabled', !$table.bootstrapTable('getSelections').length);
+                selections = getIdSelections();
+            });
+
+            $remove.click(function () {
+                const ids = getIdSelections();
+                $table.bootstrapTable('remove', {
+                    field: 'transactionId',
+                    values: ids
+                });
+                $remove.prop('disabled', true);
+            });
+        }
+
+        $(function () {
+            initTable();
+            $('#locale').change(initTable);
+        });
+    </script>
+}
+
+@section Styles {
+    <style>
+        .select,
+        #locale {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            border-radius: 6px;
+        }
+
+        .like {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        table {
+            font-size: 0.95rem;
+        }
+
+        h2 {
+            color: #333;
+        }
+    </style>
+}
+ *@

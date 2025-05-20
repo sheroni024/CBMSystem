@@ -1,0 +1,345 @@
+﻿@using CBMSystem.ViewModels
+@model ReportViewModel
+@{
+    ViewData["Title"] = "Model.Title";
+}
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card shadow-sm border-0" style="max-width: 600px; width: 100%;">
+        <div class="card-header text-black d-flex justify-content-between align-items-center" style="background-color:gainsboro;">
+            <h4 class="mb-0">@Model.Title</h4>
+            <a asp-action="Index" class="btn btn-secondary ">Back to List</a>
+        </div>
+
+        <div class="card-body p-4">
+            @switch (Model.Type.ToLower())
+            {
+                case "customer":
+                    <dl class="row">
+                        <dt class="col-sm-5">Customer ID</dt>
+                        <dd class="col-sm-7">@Model.XCustomerAccount.CustomerId</dd>
+
+                        <dt class="col-sm-5">Full Name</dt>
+                        <dd class="col-sm-7">@Model.XCustomerAccount.FirstName @Model.XCustomerAccount.LastName</dd>
+
+                        <dt class="col-sm-5">Email</dt>
+                        <dd class="col-sm-7">@Model.XCustomerAccount.Email</dd>
+
+                        <dt class="col-sm-5">Phone</dt>
+                        <dd class="col-sm-7">@Model.XCustomerAccount.MobileNumber</dd>
+
+                        <dt class="col-sm-5">PAN Card</dt>
+                        <dd class="col-sm-7">@Model.XCustomerAccount.PancardNumber</dd>
+
+                        <dt class="col-sm-5">Aadhaar Number</dt>
+                        <dd class="col-sm-7">@Model.XCustomerAccount.AadhaarNumber</dd>
+
+                        <dt class="col-sm-5">Address</dt>
+                        <dd class="col-sm-7">@Model.XCustomerAccount.Address</dd>
+
+                        <dt class="col-sm-5">Date of Birth</dt>
+                        <dd class="col-sm-7">@Model.XCustomerAccount.DateOfBirth?.ToString("dd MMM yyyy")</dd>
+                    </dl>
+                    break;
+
+                case "loan":
+                    <dl class="row">
+                        <dt class="col-sm-4">Loan ID</dt>
+                        <dd class="col-sm-8">@Model.XLoan.LoanId</dd>
+
+                        <dt class="col-sm-4">Account Number</dt>
+                        <dd class="col-sm-8">@Model.XLoan.AccountNumber</dd>
+
+                        <dt class="col-sm-4">Loan Type</dt>
+                        <dd class="col-sm-8">@Model.XLoan.LoanType</dd>
+
+                        <dt class="col-sm-4">Loan Amount</dt>
+                        <dd class="col-sm-8">₹@Model.XLoan.LoanAmount.ToString("N2")</dd>
+
+                        <dt class="col-sm-4">Interest Rate</dt>
+                        <dd class="col-sm-8">@Model.XLoan.InterestRate %</dd>
+
+                        <dt class="col-sm-4">Loan Term (Years)</dt>
+                        <dd class="col-sm-8">@Model.XLoan.LoanTerm</dd>
+
+                        <dt class="col-sm-4">Duration (Months)</dt>
+                        <dd class="col-sm-8">@Model.XLoan.DurationMonths</dd>
+
+                        <dt class="col-sm-4">Applied Date</dt>
+                        <dd class="col-sm-8">@Model.XLoan.AppliedDate.ToString("dd MMM yyyy")</dd>
+
+                        <dt class="col-sm-4">Status</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.XLoan.Status?.StatusName != null)
+                            {
+                                <span class="badge bg-primary">@Model.XLoan.Status.StatusName</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Pending</span>
+                            }
+                        </dd>
+                    </dl>
+                    break;
+
+                case "transaction":
+                    <dl class="row">
+                        <dt class="col-sm-5">Transaction ID</dt>
+                        <dd class="col-sm-7">@Model.XTransaction.TransactionId</dd>
+
+                        <dt class="col-sm-5">Account Number</dt>
+                        <dd class="col-sm-7">@Model.XTransaction.AccountNumber</dd>
+
+                        <dt class="col-sm-5">Transaction Type</dt>
+                        <dd class="col-sm-7">@Model.XTransaction.TransactionType</dd>
+
+                        <dt class="col-sm-5">Amount</dt>
+                        <dd class="col-sm-7">₹@Model.XTransaction.Amount.ToString("N2")</dd>
+
+                        <dt class="col-sm-5">Reference Number</dt>
+                        <dd class="col-sm-7">@Model.XTransaction.ReferenceNumber</dd>
+
+                        <dt class="col-sm-5">Transaction Date</dt>
+                        <dd class="col-sm-7">@Model.XTransaction.TransactionDate.ToString("dd MMM yyyy")</dd>
+
+                        <dt class="col-sm-5">Balance After</dt>
+                        <dd class="col-sm-7">₹@Model.XTransaction.BalanceAfterTransaction.ToString("N2")</dd>
+
+                        <dt class="col-sm-5">Created By</dt>
+                        <dd class="col-sm-7">@Model.XTransaction.CreatedBy</dd>
+                    </dl>
+                    break;
+
+                    case "demat":
+                    <dl class="row">
+                        <dt class="col-sm-4">Demat ID</dt>
+                        <dd class="col-sm-8">@Model.XDematAccount.DematId</dd>
+
+                        <dt class="col-sm-4">Customer ID</dt>
+                        <dd class="col-sm-8">@Model.XDematAccount.CustomerId</dd>
+
+                        <dt class="col-sm-4">Broker Name</dt>
+                        <dd class="col-sm-8">@Model.XDematAccount.BrokerName</dd>
+
+                        <dt class="col-sm-4">Account Number</dt>
+                        <dd class="col-sm-8">@Model.XDematAccount.AccountNumber</dd>
+
+                        <dt class="col-sm-4">Aadhaar Linked</dt>
+                        <dd class="col-sm-8">@Model.XDematAccount.AadhaarLinked</dd>
+
+                        <dt class="col-sm-4">PAN Linked</dt>
+                        <dd class="col-sm-8">@Model.XDematAccount.Panlinked</dd>
+
+                        <dt class="col-sm-4">Balance</dt>
+                        <dd class="col-sm-8">₹@Model.XDematAccount.Balance?.ToString("N2")</dd>
+
+                        <dt class="col-sm-4">Account Status</dt>
+                        <dd class="col-sm-8">@Model.XDematAccount.AccountStatus</dd>
+
+                        <dt class="col-sm-4">Created At</dt>
+                        <dd class="col-sm-8">@Model.XDematAccount.CreatedAt?.ToString("dd MMM yyyy")</dd>
+                    </dl>
+                    break;
+
+                    case "investment":
+                    <dl class="row">
+                        <dt class="col-sm-4">Investment ID</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.InvestmentId</dd>
+
+                        <dt class="col-sm-4">Customer ID</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.CustomerId</dd>
+
+                        <dt class="col-sm-4">Demat ID</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.DematId</dd>
+
+                        <dt class="col-sm-4">Type</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.InvestmentType</dd>
+
+                        <dt class="col-sm-4">Name</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.InvestmentName</dd>
+
+                        <dt class="col-sm-4">Amount</dt>
+                        <dd class="col-sm-8">₹@Model.XInvestment.InvestmentAmount.ToString("N2")</dd>
+
+                        <dt class="col-sm-4">Units Purchased</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.UnitsPurchased</dd>
+
+                        <dt class="col-sm-4">NAV</dt>
+                        <dd class="col-sm-8">.XInvestment@Model.Nav</dd>
+
+                        <dt class="col-sm-4">Stock Price</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.StockPrice</dd>
+
+                        <dt class="col-sm-4">Policy Number</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.PolicyNumber</dd>
+
+                        <dt class="col-sm-4">Scheme ID</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.SchemeId</dd>
+
+                        <dt class="col-sm-4">Investment Date</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.InvestmentDate?.ToString("dd MMM yyyy")</dd>
+
+                        <dt class="col-sm-4">Redemption Date</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.RedemptionDate?.ToString("dd MMM yyyy")</dd>
+
+                        <dt class="col-sm-4">Status</dt>
+                        <dd class="col-sm-8">@Model.XInvestment.Status</dd>
+
+                    </dl>
+                    break;
+
+                case "fraud":
+                case "investigation":
+                    <dl class="row">
+                        <dt class="col-sm-4">Investigation ID</dt>
+                        <dd class="col-sm-8">@Model.XFraudReport.FraudReportId</dd>
+
+                        <dt class="col-sm-4">Customer ID</dt>
+                        <dd class="col-sm-8">@Model.XFraudReport.CustomerId</dd>
+
+                        <dt class="col-sm-4">Account Number</dt>
+                        <dd class="col-sm-8">@Model.XFraudReport.AccountNumber</dd>
+
+                        <dt class="col-sm-4">Fraud Type</dt>
+                        <dd class="col-sm-8">@Model.XFraudReport.FraudType.TypeName</dd>
+
+                        <dt class="col-sm-4">Description</dt>
+                        <dd class="col-sm-8">@Model.XFraudReport.Description</dd>
+
+                        <dt class="col-sm-4">Reported Date</dt>
+                        <dd class="col-sm-8">@Model.XFraudReport.ReportedDate.ToString("dd MMM yyyy")</dd>
+
+                        <dt class="col-sm-4">Status</dt>
+                        <dd class="col-sm-8">@Model.XFraudReport.Status</dd>
+
+                        <dt class="col-sm-4">Latest Action Taken</dt>
+                        <dd class="col-sm-8">
+                            Under Investigation
+                            @* @Model.XFraudReport.FraudActions.OrderByDescending(a => a.ActionDate).FirstOrDefault()?.ActionTaken ?? "No actions" *@
+                        </dd>
+                    </dl>
+                    break;
+
+
+                default:
+                    <div class="alert alert-warning">No details available for this type.</div>
+                    break;
+            }
+
+            @* Show Download Buttons only when ID exists *@
+            <div class="text-end mt-4">
+                @if (Model.Type?.ToLower() == "customer" && Model.XCustomerAccount != null)
+                {
+                    <a asp-action="DownloadReport"
+                       asp-route-type="customer"
+                       asp-route-id="@Model.XCustomerAccount.CustomerId"
+                       asp-route-format="txt"
+                       class="btn btn-outline-primary">
+                        <i class="fas fa-download"></i> Download Text
+                    </a>
+                    <a asp-action="DownloadReport"
+                       asp-route-type="customer"
+                       asp-route-id="@Model.XCustomerAccount.CustomerId"
+                       asp-route-format="pdf"
+                       class="btn btn-outline-danger">
+                        <i class="fas fa-download"></i> Download PDF
+                    </a>
+                }
+                else if (Model.Type?.ToLower() == "loan" && Model.XLoan != null)
+                {
+                    <a asp-action="DownloadReport"
+                       asp-route-type="loan"
+                       asp-route-id="@Model.XLoan.LoanId"
+                       asp-route-format="txt"
+                       class="btn btn-outline-primary">
+                        <i class="fas fa-download"></i> Download Text
+                    </a>
+                    <a asp-action="DownloadReport"
+                       asp-route-type="loan"
+                       asp-route-id="@Model.XLoan.LoanId"
+                       asp-route-format="pdf"
+                       class="btn btn-outline-danger">
+                        <i class="fas fa-download"></i> Download PDF
+                    </a>
+                }
+                else if (Model.Type?.ToLower() == "transaction" && Model.XTransaction != null)
+                {
+                    <a asp-action="DownloadReport"
+                       asp-route-type="transaction"
+                       asp-route-id="@Model.XTransaction.TransactionId"
+                       asp-route-format="txt"
+                       class="btn btn-outline-primary">
+                        <i class="fas fa-download"></i> Download Text
+                    </a>
+                    <a asp-action="DownloadReport"
+                       asp-route-type="transaction"
+                       asp-route-id="@Model.XTransaction.TransactionId"
+                       asp-route-format="pdf"
+                       class="btn btn-outline-danger">
+                        <i class="fas fa-download"></i> Download PDF
+                    </a>
+                }
+                else if (Model.Type?.ToLower() == "demat" && Model.XDematAccount != null)
+                {
+                    <a asp-action="DownloadReport"
+                       asp-route-type="demat"
+                       asp-route-id="@Model.XDematAccount.DematId"
+                       asp-route-format="txt"
+                       class="btn btn-outline-primary">
+                        <i class="fas fa-download"></i> Download Text
+                    </a>
+                    <a asp-action="DownloadReport"
+                       asp-route-type="demat"
+                       asp-route-id="@Model.XDematAccount.DematId"
+                       asp-route-format="pdf"
+                       class="btn btn-outline-danger">
+                        <i class="fas fa-download"></i> Download PDF
+                    </a>
+                }
+                else if (Model.Type?.ToLower() == "investment" && Model.XInvestment != null)
+                {
+                    <a asp-action="DownloadReport"
+                       asp-route-type="investment"
+                       asp-route-id="@Model.XInvestment.InvestmentId"
+                       asp-route-format="txt"
+                       class="btn btn-outline-primary">
+                        <i class="fas fa-download"></i> Download Text
+                    </a>
+                    <a asp-action="DownloadReport"
+                       asp-route-type="investment"
+                       asp-route-id="@Model.XInvestment.InvestmentId"
+                       asp-route-format="pdf"
+                       class="btn btn-outline-danger">
+                        <i class="fas fa-download"></i> Download PDF
+                    </a>
+                }
+                else if ((Model.Type?.ToLower() == "fraud" || Model.Type?.ToLower() == "investigation") && Model.XFraudReport != null)
+                {
+                    <a asp-action="DownloadReport"
+                       asp-route-type="fraud"
+                       asp-route-id="@Model.XFraudReport.FraudReportId"
+                       asp-route-format="txt"
+                       class="btn btn-outline-primary">
+                        <i class="fas fa-download"></i> Download Text
+                    </a>
+                    <a asp-action="DownloadReport"
+                       asp-route-type="fraud"
+                       asp-route-id="@Model.XFraudReport.FraudReportId"
+                       asp-route-format="pdf"
+                       class="btn btn-outline-danger">
+                        <i class="fas fa-download"></i> Download PDF
+                    </a>
+                }
+
+            </div>
+
+
+                @* <a asp-action="Delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure to delete this item?')">Delete</a> *@
+            </div>
+        </div>
+    </div>
+</div>

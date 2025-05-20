@@ -23,7 +23,7 @@ public partial class Account
 
     public DateTime? CreatedDate { get; set; }
 
-    public long? CreatedBy { get; set; }
+    public string? CreatedBy { get; set; }
 
     public DateTime? UpdatedDate { get; set; }
 
@@ -35,13 +35,11 @@ public partial class Account
 
     public virtual ICollection<BillPayment> BillPayments { get; set; } = new List<BillPayment>();
 
-    public virtual Branch? BranchCode { get; set; }
-
     public virtual ICollection<Card> Cards { get; set; } = new List<Card>();
 
     public virtual CustomerAccount Customer { get; set; } = null!;
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
-    public virtual Status? Status { get; set; }
+    public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }

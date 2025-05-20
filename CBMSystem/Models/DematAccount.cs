@@ -9,9 +9,9 @@ public partial class DematAccount
 
     public long CustomerId { get; set; }
 
-    public string BrokerName { get; set; } = null!;
+    public string? BrokerName { get; set; }
 
-    public string AccountNumber { get; set; } = null!;
+    public string? AccountNumber { get; set; }
 
     public bool? AadhaarLinked { get; set; }
 
@@ -22,6 +22,8 @@ public partial class DematAccount
     public string? AccountStatus { get; set; }
 
     public DateTime? CreatedAt { get; set; }
+
+    public string? CreatedBy { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 

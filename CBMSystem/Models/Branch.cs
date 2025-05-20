@@ -15,9 +15,7 @@ public partial class Branch
 
     public string? BranchManager { get; set; }
 
-    public virtual ICollection<Account> Accounts { get; set; } = new List<Account>();
-
     public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
 
-    public virtual Transaction? Transaction { get; set; }
+    public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }

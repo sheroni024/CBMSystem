@@ -12,7 +12,10 @@ namespace CBMSystem.Repository.Interface
         User GetUserByEmailAndPassword(string email, string password);
         User GetUserByEmail(string email);
         Task<IEnumerable<User>> GetAllUsers();
-
+        void Update(User user);
+        List<string> GetRecentActivity(string userEmail);
+        void UpdateUserToken(User user);
+        User GetUserByToken(string sessionToken);
         //void RegisterUser(User user);
         //string HashPassword(string password);
     }

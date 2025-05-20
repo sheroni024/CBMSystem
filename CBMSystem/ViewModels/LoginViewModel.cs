@@ -16,5 +16,7 @@ namespace CBMSystem.ViewModels
         public bool RememberMe { get; set; }
 
         public string ErrorMessage { get; set; }
+
+        public long UserId { get; set; }
     }
 }
